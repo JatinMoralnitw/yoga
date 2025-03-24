@@ -100,12 +100,6 @@ onAuthStateChanged(auth, (user) => {
                 alert("Failed to log out. Try again.");
             }
         });
-
-    } else {
-        console.log("No user found, redirecting to login...");
-        if (window.location.pathname !== "/login.html") {
-            window.location.href = "login.html"; // Only redirect if NOT already on login page
-        }
     }
 });
 
