@@ -50,22 +50,15 @@
     <footer>
         <p>&copy; 2025 Yoga for Everyone | All Rights Reserved</p>
     </footer>
-    <script>
-        function toggleMenu() {
-            var menu = document.getElementById("menu");
-            menu.style.display = (menu.style.display === "block") ? "none" : "block";
-        }
+    
+    <!-- Firebase scripts -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
         
-        document.addEventListener("click", function(event) {
-            var menu = document.getElementById("menu");
-            var button = document.querySelector(".menu-button");
-            
-            if (!menu.contains(event.target) && !button.contains(event.target)) {
-                menu.style.display = "none";
-            }
-        });
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";        
-        //logout button
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCZmSzphanrYQC0FqTyR_OYKNB42wOythQ",
             authDomain: "manflowyoga-a36a7.firebaseapp.com",
@@ -75,14 +68,13 @@
             appId: "1:512748165114:web:1906b5e8d9d83062c5f643"
         };
 
-        //initinalise firebase
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
+        
+        // Logout functionality
         const logoutBtn = document.getElementById("logoutBtn");
-
         logoutBtn.addEventListener("click", async () => {
             try {
                 await signOut(auth);
@@ -91,6 +83,28 @@
             } catch (error) {
                 console.error("Logout Error:", error);
                 alert("Failed to log out. Try again.");
+            }
+        });
+    </script>
+    
+    <script>
+        // Profile menu toggle
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("menu");
+            var button = document.querySelector(".menu-button");
+            
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = "none";
             }
         });
     </script>
