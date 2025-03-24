@@ -53,7 +53,13 @@
     <!-- Firebase scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+import { 
+    getAuth, 
+    onAuthStateChanged, 
+    signOut, 
+    setPersistence, 
+    browserLocalPersistence 
+} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 // Firebase configuration
@@ -66,12 +72,13 @@ const firebaseConfig = {
     appId: "1:512748165114:web:1906b5e8d9d83062c5f643"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Ensure authentication session is persisted
-setPersistence(auth, browserSessionPersistence)
+// Set session persistence to LOCAL so users remain logged in
+setPersistence(auth, browserLocalPersistence)
     .then(() => {
         console.log("Session persistence enabled.");
     })
@@ -79,9 +86,12 @@ setPersistence(auth, browserSessionPersistence)
         console.error("Error setting persistence:", error);
     });
 
+// Check if a user is already logged in
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        // User is signed in, update profile menu
+        console.log("User is logged in:", user.email);
+
+        // Update the profile dropdown dynamically
         const userProfile = document.getElementById("userProfile");
         userProfile.innerHTML = `
             <li>${user.displayName || "User"}</li>
@@ -100,6 +110,14 @@ onAuthStateChanged(auth, (user) => {
                 alert("Failed to log out. Try again.");
             }
         });
+
+    } else {
+        console.log("No user found. Redirecting...");
+        
+        // Redirect to login page ONLY IF NOT ALREADY ON LOGIN PAGE
+        if (!window.location.pathname.includes("login.html")) {
+            window.location.href = "login.html";
+        }
     }
 });
 
