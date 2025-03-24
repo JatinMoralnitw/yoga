@@ -3,13 +3,14 @@ import { getFirestore, collection, doc, getDoc } from "https://www.gstatic.com/f
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCZmSzphanrYQC0FqTyR_OYKNB42wOythQ",
-    authDomain: "manflowyoga-a36a7.firebaseapp.com",
-    projectId: "manflowyoga-a36a7",
-    storageBucket: "manflowyoga-a36a7.firebaseapp.com",
-    messagingSenderId: "512748165114",
-    appId: "1:512748165114:web:1906b5e8d9d83062c5f643"
-};
+    apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
+    authDomain: "yogadt-ed173.firebaseapp.com",
+    projectId: "yogadt-ed173",
+    storageBucket: "yogadt-ed173.firebasestorage.app",
+    messagingSenderId: "877729470017",
+    appId: "1:877729470017:web:d6d4f90eb0b553d09a58c0"
+  };
+
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
