@@ -53,45 +53,62 @@
     <!-- Firebase scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyCZmSzphanrYQC0FqTyR_OYKNB42wOythQ",
-            authDomain: "manflowyoga-a36a7.firebaseapp.com",
-            projectId: "manflowyoga-a36a7",
-            storageBucket: "manflowyoga-a36a7.firebasestorage.app",
-            messagingSenderId: "512748165114",
-            appId: "1:512748165114:web:1906b5e8d9d83062c5f643"
-        };
+import { getAuth, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyCZmSzphanrYQC0FqTyR_OYKNB42wOythQ",
+    authDomain: "manflowyoga-a36a7.firebaseapp.com",
+    projectId: "manflowyoga-a36a7",
+    storageBucket: "manflowyoga-a36a7.firebasestorage.app",
+    messagingSenderId: "512748165114",
+    appId: "1:512748165114:web:1906b5e8d9d83062c5f643"
+};
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const userProfile = document.getElementById("userProfile");
-                userProfile.innerHTML = `
-                    <li>${user.displayName || "User"}</li>
-                    <li>${user.email}</li>
-                    <button id="logoutBtn">Logout</button>
-                `;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-                document.getElementById("logoutBtn").addEventListener("click", async () => {
-                    try {
-                        await signOut(auth);
-                        alert("Logged out successfully.");
-                        window.location.href = "login.html";
-                    } catch (error) {
-                        console.error("Logout Error:", error);
-                        alert("Failed to log out. Try again.");
-                    }
-                });
-            } else {
-                window.location.href = "login.html";
+// Ensure authentication session is persisted
+setPersistence(auth, browserSessionPersistence)
+    .then(() => {
+        console.log("Session persistence enabled.");
+    })
+    .catch((error) => {
+        console.error("Error setting persistence:", error);
+    });
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in, update profile menu
+        const userProfile = document.getElementById("userProfile");
+        userProfile.innerHTML = `
+            <li>${user.displayName || "User"}</li>
+            <li>${user.email}</li>
+            <button id="logoutBtn">Logout</button>
+        `;
+
+        // Logout functionality
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                alert("Logged out successfully.");
+                window.location.href = "login.html"; // Redirect to login page after logout
+            } catch (error) {
+                console.error("Logout Error:", error);
+                alert("Failed to log out. Try again.");
             }
         });
+
+    } else {
+        console.log("No user found, redirecting to login...");
+        if (window.location.pathname !== "/login.html") {
+            window.location.href = "login.html"; // Only redirect if NOT already on login page
+        }
+    }
+});
+
     </script>
     
     <script>
