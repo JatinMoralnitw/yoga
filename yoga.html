@@ -111,13 +111,6 @@ onAuthStateChanged(auth, (user) => {
             }
         });
 
-    } else {
-        console.log("No user found. Redirecting...");
-        
-        // Redirect to login page ONLY IF NOT ALREADY ON LOGIN PAGE
-        if (!window.location.pathname.includes("login.html")) {
-            window.location.href = "login.html";
-        }
     }
 });
 
