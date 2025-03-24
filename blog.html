@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoga Blog</title>
+    <link rel="stylesheet" href="yoga.css">
+    <style>
+        /* Import main yoga styles */
+        @import url('yoga.css');
+        
+        /* Blog Page Styling */
+        body{
+        padding: 20px;
+        }
+        .blog-container {
+        max-width: 900px;
+        margin: 50px auto;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .blog-container h2 {
+        font-size: 2.5rem;
+        color: #30c437;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .blog-post {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        }
+        
+        .blog-post:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .blog-post img {
+        width: 100%;
+        border-radius: 10px;
+        transition: opacity 0.3s;
+        }
+        
+        .blog-post img:hover {
+        opacity: 0.8;
+        }
+        
+        .blog-post h3 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        margin-top: 10px;
+        }
+        
+        .blog-post p {
+        color: #555;
+        font-size: 1.1rem;
+        margin: 10px 0;
+        }
+        
+        .blog-post a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 15px;
+        background: #30c437;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background 0.3s;
+        }
+        
+        .blog-post a:hover {
+        background: #228b22;
+        }
+        
+        /* Fade-in Effect */
+        .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 1s ease-in-out forwards;
+        }
+        
+        @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    </style>
+</head>
+<body>
+    <header>
+        <p>Your Yoga Space</p>
+        <hr>
+        <nav>
+            <ul style="display: flex">
+                <div class="dropdown">
+                    <div class="menu-button" onclick="toggleMenu()">Profile</div>
+                    <div id="menu" class="menu">
+                        <ul class="profile">
+                            <li>sumit</li>
+                            <button id="logoutBtn">Logout</button>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-left: auto;display: flex;"> 
+                    <li><a href="yoga.html">HOME</a></li>
+                    <li><a href="courses.html">COURSES</a></li>
+                    <li><a href="yogabodyproblem.html">YOGA FOR BODY PAIN</a></li>
+                    <li><a href="yogaasana.html">YOGA ASANAS</a></li>
+                    <li><a href="blog.html">BLOG</a></li>
+                    <li><a href="yogacontactus.html">CONTACT US</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="blog-container">
+            <h2>Yoga & Wellness Blog</h2>
+            <div class="blog-post fade-in">
+                <img src="blog1.jpg" alt="Yoga for Beginners" width="200px" height="500px">
+                <h3>Yoga for Beginners: A Step-by-Step Guide</h3>
+                <p>Start your yoga journey with easy poses and breathing techniques that help improve flexibility and mindfulness.</p>
+                <a href="https://jadeyoga.com/blogs/news/yoga-for-beginners-7-tips-for-starting-yoga-for-the-first-time?srsltid=AfmBOoo6FqTMcOH6czoc6dVJ-MLB8wvSTMjCWFaeEk_qYUdYCUWWbCXr" target="_blank">Read More</a>
+            </div>
+            
+            <div class="blog-post fade-in">
+                <img src="blog2.webp" alt="Yoga and Mental Health"width="200px" height="500px">
+                <h3>How Yoga Enhances Mental Well-being</h3>
+                <p>Discover the connection between yoga and mental health. Learn how meditation and yoga can reduce stress and anxiety.</p>
+                <a href="https://www.houstonmethodist.org/blog/articles/2021/sep/the-benefits-of-yoga-how-it-boosts-your-mental-health/" target="_blank">Read More</a>
+            </div>
+            
+            <div class="blog-post fade-in">
+                <img src="blog3.jpg" alt="Morning Yoga Routine">
+                <h3>Morning Yoga Routine for a Fresh Start</h3>
+                <p>Boost your energy with a simple 10-minute morning yoga routine that sets a positive tone for the day.</p>
+                <a href="https://www.healthline.com/health/fitness-exercise/morning-yoga-routine" target="_blank">Read More</a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Yoga for Everyone | All Rights Reserved</p>
+    </footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
+            authDomain: "yogadt-ed173.firebaseapp.com",
+            projectId: "yogadt-ed173",
+            storageBucket: "yogadt-ed173.firebasestorage.app",
+            messagingSenderId: "877729470017",
+            appId: "1:877729470017:web:d6d4f90eb0b553d09a58c0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userProfile = document.getElementById("userProfile");
+                userProfile.innerHTML = `
+                    <li>${user.displayName || "User"}</li>
+                    <li>${user.email}</li>
+                    <button id="logoutBtn">Logout</button>
+                `;
+
+                document.getElementById("logoutBtn").addEventListener("click", async () => {
+                    try {
+                        await signOut(auth);
+                        alert("Logged out successfully.");
+                        window.location.href = "login.html";
+                    } catch (error) {
+                        console.error("Logout Error:", error);
+                        alert("Failed to log out. Try again.");
+                    }
+                });
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+    </script>
+    
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+        
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("menu");
+            var button = document.querySelector(".menu-button");
+            
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
