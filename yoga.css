@@ -123,13 +123,14 @@ footer {
 
 /* Profile Menu Styling */
 .profile {
+    text-align: left;
     color: rgb(15, 9, 9);
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: 900;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.226);
     border-radius: 10px;
-    width: 100%;
-    box-shadow: 0px 5px 10px grey;
+    width: 345px;
+    box-shadow: 1px 5px 10px grey;
 }
 
 .dropdown {
@@ -138,6 +139,7 @@ footer {
 }
 
 .menu-button {
+    width: 100%;
     background: white;
     color: #4CAF50;
     padding: 10px 15px;
@@ -159,12 +161,11 @@ footer {
     position: absolute;
     top: 100%;
     left: 0;
-    width: 100%;
     background: rgba(183, 176, 176, 0.963);
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    padding: 5px;
+    padding: 10px;
 }
 
 .menu ul {
@@ -176,7 +177,7 @@ footer {
 .menu ul li {
     display: block;
     padding: 10px;
-    text-align: center;
+    text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
