@@ -53,83 +53,85 @@
     <!-- Firebase scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { 
-    getAuth, 
-    onAuthStateChanged, 
-    signOut, 
-    setPersistence, 
-    browserLocalPersistence 
-} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
-
-// Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyCZmSzphanrYQC0FqTyR_OYKNB42wOythQ",
-    authDomain: "manflowyoga-a36a7.firebaseapp.com",
-    projectId: "manflowyoga-a36a7",
-    storageBucket: "manflowyoga-a36a7.firebasestorage.app",
-    messagingSenderId: "512748165114",
-    appId: "1:512748165114:web:1906b5e8d9d83062c5f643"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Set session persistence to LOCAL so users remain logged in
-setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-        console.log("Session persistence enabled.");
-    })
-    .catch((error) => {
-        console.error("Error setting persistence:", error);
-    });
-
-// Check if a user is already logged in
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log("User is logged in:", user.email);
-
-        // Update the profile dropdown dynamically
-        const userProfile = document.getElementById("userProfile");
-        userProfile.innerHTML = `
-            <li>${user.displayName || "User"}</li>
-            <li>${user.email}</li>
-            <button id="logoutBtn">Logout</button>
-        `;
-
-        // Logout functionality
-        document.getElementById("logoutBtn").addEventListener("click", async () => {
-            try {
-                await signOut(auth);
-                alert("Logged out successfully.");
-                window.location.href = "login.html"; // Redirect to login page after logout
-            } catch (error) {
-                console.error("Logout Error:", error);
-                alert("Failed to log out. Try again.");
-            }
-        });
-
-    }
-});
-
-    </script>
-    
-    <script>
-        function toggleMenu() {
-            var menu = document.getElementById("menu");
-            menu.style.display = (menu.style.display === "block") ? "none" : "block";
-        }
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
         
-        document.addEventListener("click", function(event) {
-            var menu = document.getElementById("menu");
-            var button = document.querySelector(".menu-button");
-            
-            if (!menu.contains(event.target) && !button.contains(event.target)) {
-                menu.style.display = "none";
-            }
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
+            authDomain: "yogadt-ed173.firebaseapp.com",
+            projectId: "yogadt-ed173",
+            storageBucket: "yogadt-ed173.firebasestorage.app",
+            messagingSenderId: "877729470017",
+            appId: "1:877729470017:web:d6d4f90eb0b553d09a58c0"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Check if a user is logged in and fetch their name from Firestore
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log("User is logged in:", user.email);
+        
+                // Fetch user data from Firestore
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                let fullName = "User"; // Default name in case Firestore doesn't return anything
+        
+                if (userDoc.exists()) {
+                    fullName = userDoc.data().fullName || "User";
+                } else {
+                    console.warn("No user document found in Firestore.");
+                }
+        
+                // Update the profile dropdown dynamically
+                const userProfile = document.getElementById("userProfile");
+                userProfile.innerHTML = `
+                    <li><strong>${fullName}</strong></li>
+                    <li>${user.email}</li>
+                    <button id="logoutBtn">Logout</button>
+                `;
+        
+                // Logout functionality
+                document.getElementById("logoutBtn").addEventListener("click", async () => {
+                    try {
+                        await signOut(auth);
+                        alert("Logged out successfully.");
+                        window.location.href = "login.html"; // Redirect to login page after logout
+                    } catch (error) {
+                        console.error("Logout Error:", error);
+                    }
+                });
+        
+            } 
         });
+
+</script>
+
+<script>
+    function toggleMenu() {
+        var menu = document.getElementById("menu");
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+    
+    document.addEventListener("click", function(event) {
+        var menu = document.getElementById("menu");
+        var button = document.querySelector(".menu-button");
+        
+        if (!menu.contains(event.target) && !button.contains(event.target)) {
+            menu.style.display = "none";
+        }
+    });
     </script>
 </body>
 </html>
