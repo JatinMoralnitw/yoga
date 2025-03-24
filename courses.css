@@ -1,0 +1,144 @@
+/* Import Yoga Styles */
+@import url('yoga.css');
+
+/* Course Page Specific Styles */
+#courses-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+#courses-container h2 {
+    color: #2e7d32;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#courses-container p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+.course-list-container {
+    background: rgba(236, 246, 240, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+#courseList {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+#courseList li {
+    background: linear-gradient(to right, #ffffff, #f8fbf8);
+    margin: 15px 0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 5px solid #4CAF50;
+}
+
+#courseList li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.course-loading {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+.course-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.course-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.course-actions {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.add-btn { 
+    background: linear-gradient(to bottom, #4CAF50, #388E3C); 
+    color: white; 
+}
+
+.access-btn { 
+    background: linear-gradient(to bottom, #2196F3, #1976D2); 
+    color: white; 
+}
+
+.remove-btn { 
+    background: linear-gradient(to bottom, #F44336, #D32F2F); 
+    color: white; 
+}
+
+#logoutBtn {
+    background: linear-gradient(to bottom, #333333, #000000);
+    color: white;
+    margin-top: 20px;
+}
+
+/* Animation for loading courses */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.course-loading {
+    animation: pulse 1.5s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #courses-container {
+        padding: 20px;
+        max-width: 95%;
+    }
+    
+    #courseList li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .course-actions {
+        margin-top: 15px;
+        width: 100%;
+        justify-content: space-between;
+    }
+}
