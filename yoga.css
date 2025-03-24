@@ -31,7 +31,7 @@ header p {
     font-size: 60px;
     font-weight: bolder;
     color: aqua;
-    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 /* Navigation Bar */
@@ -46,7 +46,7 @@ nav ul li {
     display: inline;
     margin: 0 15px;
 }
-nav ul li:first-child{
+nav ul li:first-child {
     margin-right: auto;
 }
 nav ul li a {
@@ -62,7 +62,7 @@ nav ul li a:hover {
     padding: 5px;
     text-decoration: underline;
     text-underline-offset: 5px;
-    text-shadow: 1px 5px 10px  rgb(64, 67, 61);
+    text-shadow: 1px 5px 10px rgb(64, 67, 61);
     color: #ebff3b;
 }
 main {
@@ -75,9 +75,9 @@ main {
 }
 
 /* Intro Section */
-#intro , #featured{
+#intro, #featured {
     background: rgba(218, 237, 233, 0.648);
-    background-image: linear-gradient(rgba(2, 2, 0, 0), rgba(0, 0, 0, 0.8)),url('pose.png');
+    background-image: linear-gradient(rgba(2, 2, 0, 0), rgba(0, 0, 0, 0.8)), url('pose.png');
     background-size: cover;
     padding: 30px;
     border-radius: 10px;
@@ -86,7 +86,7 @@ main {
     margin-bottom: 30px;
 }
 
-#intro h2 ,#featured h2 {
+#intro h2, #featured h2 {
     font-size: 2.1rem;
     color: #68f30bfb;
     text-shadow: 1px 5px 5px rgb(150, 204, 62);
@@ -120,14 +120,94 @@ footer {
     margin-top: auto;
 }
 
+/* Profile Menu Styling */
+.profile {
+    color: rgb(255, 255, 255);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-button {
+    background: white;
+    color: #4CAF50;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.menu-button:hover {
+    background: #e0e0e0;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 150px;
+    background: rgba(230, 10, 10, 0.963);
+    border-radius: 5px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 5px;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu ul li {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.menu ul li:last-child {
+    border-bottom: none;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+#logoutBtn {
+    background: black;
+    color: white;
+    margin-top: 10px;
+    margin-left: 0;
+    width: 100%;
+}
+
+#logoutBtn:hover {
+    background: #333;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
-    header h1 {
-        font-size: 1.6rem;
+    header p {
+        font-size: 36px;
     }
 
     nav ul {
         padding: 0;
+        flex-direction: column;
     }
 
     nav ul li {
@@ -142,61 +222,8 @@ footer {
     #intro, #featured {
         max-width: 90%;
     }
-}
-.profile{
-    color: rgb(255, 255, 255);
-}
-.menu {
-    margin-top: 5px;
-    display: none;
-    /* color: white; */
-    position: absolute;
-    top: 100%; /* Positions it just below the navbar */
-    left: 0;
-    width: 150px; /* Set a fixed width */
-    background: rgba(230, 10, 10, 0.963);
-    border-radius: 5px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensures it stays above other elements */
-}
-.menu-button {
-    background: white;
-    color: #4CAF50;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background 0.3s;
-}
-
-/* Ensure the parent `<li>` is positioned relative */
-.dropdown {
-    position: relative;
-}
-
-/* Align dropdown content properly */
-.menu ul {
-    list-style: none;
-    padding: 0;
-}
-
-.menu ul li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.menu ul li:last-child {
-    border-bottom: none;
-}
-button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-#logoutBtn {
-    background: black;
-    color: white;
-    margin-top: 20px;
+    
+    .dropdown {
+        margin-bottom: 15px;
+    }
 }
