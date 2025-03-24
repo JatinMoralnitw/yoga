@@ -5,33 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yoga for Everyone</title>
     <link rel="stylesheet" href="yoga.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>Welcome to Yoga for Everyone</h1>
+        <p>Your Yoga Space</p>
+        <hr>
         <nav>
-            <ul>
-                <li><a href="courses.html">Courses</a></li>
-                <li><a href="yogabodyproblem.html">Yoga for Body Problems</a></li>
-                <li><a href="yogaasana.html">Yoga Asanas</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="yogacontactus.html">Contact Us</a></li>
+            <ul style="display: flex">
+                <div class="dropdown">
+                    <div class="menu-button" onclick="toggleMenu()">Profile</div>
+                    <div id="menu" class="menu">
+                        <ul class="profile">
+                            <li>sumit</li>
+                            <button id="logoutBtn">Logout</button>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-left: auto;display: flex;"> 
+                    <li><a href="yoga.html">HOME</a></li>
+                    <li><a href="courses.html">COURSES</a></li>
+                    <li><a href="yogabodyproblem.html">YOGA FOR BODY PAIN</a></li>
+                    <li><a href="yogaasana.html">YOGA ASANAS</a></li>
+                    <li><a href="#blog">BLOG</a></li>
+                    <li><a href="yogacontactus.html">CONTACT US</a></li>
+                </div>
             </ul>
         </nav>
     </header>
+    
     <main>
         <section id="intro">
             <h2>Discover the Benefits of Yoga</h2>
-            <p>Join us on a journey to improve your physical and mental well-being through yoga.</p>
+            <p style="color: whitesmoke;">Join us on a journey to improve your physical and mental well-being through yoga.</p>
         </section>
+        
         <section id="featured">
             <h2>Featured Courses</h2>
-            <p>Explore our range of yoga courses designed for all levels.</p>
+            <p style="color: whitesmoke;">Explore our range of yoga courses designed for all levels.</p>
             <a href="courses.html">View Courses</a>
         </section>
     </main>
+    
     <footer>
-        <p>&copy; 2025 Yoga for Everyone</p>
+        <p>&copy; 2025 Yoga for Everyone | All Rights Reserved</p>
     </footer>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+        
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("menu");
+            var button = document.querySelector(".menu-button");
+            
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = "none";
+            }
+        });
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";        
+        //logout button
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZmSzphanrYQC0FqTyR_OYKNB42wOythQ",
+            authDomain: "manflowyoga-a36a7.firebaseapp.com",
+            projectId: "manflowyoga-a36a7",
+            storageBucket: "manflowyoga-a36a7.firebasestorage.app",
+            messagingSenderId: "512748165114",
+            appId: "1:512748165114:web:1906b5e8d9d83062c5f643"
+        };
+
+        //initinalise firebase
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        logoutBtn.addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                alert("Logged out successfully.");
+                window.location.href = "login.html";
+            } catch (error) {
+                console.error("Logout Error:", error);
+                alert("Failed to log out. Try again.");
+            }
+        });
+    </script>
 </body>
 </html>
