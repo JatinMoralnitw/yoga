@@ -3,67 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        h2 {
-            color: #333;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background: #fff;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        button {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        .add-btn { background: green; color: white; }
-        .access-btn { background: blue; color: white; }
-        .remove-btn { background: red; color: white; }
-        #logoutBtn {
-            background: black;
-            color: white;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Yoga Courses</title>
+    <link rel="stylesheet" href="yoga.css">
+    <link rel="stylesheet" href="courses.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <header>
+        <p>Your Yoga Space</p>
+        <hr>
+        <nav>
+            <ul style="display: flex">
+                <div class="dropdown">
+                    <div class="menu-button" onclick="toggleMenu()">Profile</div>
+                    <div id="menu" class="menu">
+                        <ul class="profile">
+                            <li>sumit</li>
+                            <button id="logoutBtn">Logout</button>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-left: auto;display: flex;"> 
+                    <li><a href="yoga.html">HOME</a></li>
+                    <li><a href="courses.html">COURSES</a></li>
+                    <li><a href="yogabodyproblem.html">YOGA FOR BODY PAIN</a></li>
+                    <li><a href="yogaasana.html">YOGA ASANAS</a></li>
+                    <li><a href="#blog">BLOG</a></li>
+                    <li><a href="yogacontactus.html">CONTACT US</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="courses-container">
+            <h2>Discover Your Perfect Yoga Journey</h2>
+            <p>Explore and enroll in our specialized yoga courses designed for all experience levels</p>
+            
+            <div class="course-list-container">
+                <ul id="courseList">
+                    <li class="course-loading">Loading available courses...</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Yoga for Everyone | All Rights Reserved</p>
+    </footer>
 
-<div class="container">
-    <h2>Available Courses</h2>
-    <ul id="courseList">
-        <p>Loading courses...</p>
-    </ul>
-    <button id="logoutBtn">Logout</button>
-</div>
-
-<script type="module" src="courses.js"></script>
+    <script>
+        // Profile menu toggle
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("menu");
+            var button = document.querySelector(".menu-button");
+            
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = "none";
+            }
+        });
+    </script>
+    
+    <script type="module" src="courses.js"></script>
 </body>
 </html>
