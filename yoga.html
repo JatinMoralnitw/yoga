@@ -15,6 +15,7 @@
             <ul style="display: flex">
                 <div class="dropdown">
                     <div class="menu-button" onclick="toggleMenu()"><img src="profile.avif"></div>
+                    <br>
                     <div id="menu" class="menu">
                         <ul class="profile" id="userProfile">
                             <li>Loading...</li>
@@ -38,7 +39,6 @@
             <h2>Discover the Benefits of Yoga</h2>
             <p style="color: whitesmoke;">Join us on a journey to improve your physical and mental well-being through yoga.</p>
         </section>
-        
         <section id="featured">
             <h2>Featured Courses</h2>
             <p style="color: whitesmoke;">Explore our range of yoga courses designed for all levels.</p>
@@ -79,62 +79,120 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
+        // Check if user data is in localStorage first (from previous login)
+        function updateProfileFromStorage() {
+            try {
+                const userData = JSON.parse(localStorage.getItem("userData"));
+                if (userData && userData.fullName && userData.email) {
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Name: ${userData.fullName}</strong></li>
+                        <li>Email: ${userData.email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    
+                    // Add logout event listener
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                    return true;
+                }
+            } catch (error) {
+                console.error("Error reading from localStorage:", error);
+            }
+            return false;
+        }
+        
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem("userData"); // Clear stored user data
+                alert("Logged out successfully.");
+                window.location.href = "login.html"; // Redirect to login page after logout
+            } catch (error) {
+                console.error("Logout Error:", error);
+            }
+        }
+        
+        // Try to update from localStorage first
+        const updatedFromStorage = updateProfileFromStorage();
+        
         // Check if a user is logged in and fetch their name from Firestore
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 console.log("User is logged in:", user.email);
-        
-                // Fetch user data from Firestore
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                let fullName = "User"; // Default name in case Firestore doesn't return anything
-        
-                if (userDoc.exists()) {
-                    fullName = userDoc.data().fullName || "User";
-                } else {
-                    console.warn("No user document found in Firestore.");
-                }
-        
-                // Update the profile dropdown dynamically
-                const userProfile = document.getElementById("userProfile");
-                userProfile.innerHTML = `
-                    <li><strong>${fullName}</strong></li>
-                    <li>${user.email}</li>
-                    <button id="logoutBtn">Logout</button>
-                `;
-        
-                // Logout functionality
-                document.getElementById("logoutBtn").addEventListener("click", async () => {
-                    try {
-                        await signOut(auth);
-                        alert("Logged out successfully.");
-                        window.location.href = "login.html"; // Redirect to login page after logout
-                    } catch (error) {
-                        console.error("Logout Error:", error);
+                
+                // If we already updated from localStorage, no need to fetch again
+                if (updatedFromStorage) return;
+                
+                try {
+                    // Fetch user data from Firestore
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    let fullName = "User"; // Default name
+                    let email = user.email;
+                    
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        fullName = userData.fullName || "User";
+                        
+                        // Store in localStorage for future use
+                        localStorage.setItem("userData", JSON.stringify({
+                            fullName: fullName,
+                            email: email,
+                            userId: user.uid
+                        }));
+                    } else {
+                        console.warn("No user document found in Firestore.");
                     }
-                });
-            else {
-                    console.log("No user found. Redirecting...");
+                    
+                    // Update the profile dropdown
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Name: ${fullName}</strong></li>
+                        <li>Email: ${email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    
+                    // Add logout event listener
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                    
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    // Still show something in the profile even if there's an error
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Welcome</strong></li>
+                        <li>${user.email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                }
+            } else {
+                // User is not logged in
+                console.log("No user logged in");
+                localStorage.removeItem("userData"); // Clear any stored user data
+                
+                // Redirect to login page if not already there
+                if (!window.location.href.includes("login.html")) {
                     window.location.href = "login.html";
                 }
-            } 
+            }
         });
+    </script>
 
-</script>
-
-<script>
-    function toggleMenu() {
-        var menu = document.getElementById("menu");
-        menu.style.display = (menu.style.display === "block") ? "none" : "block";
-    }
-    
-    document.addEventListener("click", function(event) {
-        var menu = document.getElementById("menu");
-        var button = document.querySelector(".menu-button");
-        
-        if (!menu.contains(event.target) && !button.contains(event.target)) {
-            menu.style.display = "none";
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
         }
-    });
+        
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("menu");
+            var button = document.querySelector(".menu-button");
+            
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = "none";
+            }
+        });
     </script>
 </body>
 </html>
