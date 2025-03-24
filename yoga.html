@@ -112,7 +112,10 @@
                         console.error("Logout Error:", error);
                     }
                 });
-        
+            else {
+                    console.log("No user found. Redirecting...");
+                    window.location.href = "login.html";
+                }
             } 
         });
 
