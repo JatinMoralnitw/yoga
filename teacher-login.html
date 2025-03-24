@@ -6,46 +6,120 @@
     <title>Teacher Login</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            height: 100vh;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 1s ease-in-out;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 450px;
+            animation: bounceIn 1.5s ease-out;
+        }
+
+        @keyframes bounceIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            50% { transform: translateY(15px); }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        h2, h3 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+
         input, button {
             display: block;
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            width: 95%;
+            font-size: 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
         }
+
+        input:hover {
+            border-color: #f9d423;
+        }
+
+        input:focus {
+            outline: none;
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border-color: #ff4e50;
+        }
+
         button {
-            background-color: #007bff;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
             color: white;
-            border: none;
             cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            border: none;
         }
+
         button:hover {
-            background-color: #0056b3;
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            transform: scale(1.15) rotate(2deg);
         }
+
         #uploadSection {
             display: none;
+        }
+
+        #uploadSection.active {
+            display: block;
+            animation: zoomIn 1s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body>
+    <div class="login-container">
+        <h2>Teacher Login</h2>
+        <input type="text" id="loginName" placeholder="Teacher Name">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button id="loginBtn">Login</button>
+        <p id="loginStatus"></p>
 
-    <h2>Teacher Login</h2>
-    <input type="text" id="loginName" placeholder="Teacher Name">
-    <input type="password" id="loginPassword" placeholder="Password">
-    <button id="loginBtn">Login</button>
-    <p id="loginStatus"></p>
-
-    <div id="uploadSection">
-        <h3>Upload Course Video</h3>
-        <input type="text" id="videoUrl" placeholder="Video URL">
-        <button id="uploadVideoBtn">Upload</button>
-        <p id="uploadStatus"></p>
+        <div id="uploadSection">
+            <h3>Upload Course Video</h3>
+            <input type="text" id="videoUrl" placeholder="Video URL">
+            <button id="uploadVideoBtn">Upload</button>
+            <p id="uploadStatus"></p>
+        </div>
     </div>
 
-    <script type="module" src="teacher-login.js"></script>
+    <script>
+        const loginBtn = document.getElementById('loginBtn');
+        const uploadSection = document.getElementById('uploadSection');
+
+        loginBtn.addEventListener('click', () => {
+            uploadSection.classList.add('active');
+            document.getElementById('loginStatus').textContent = 'Login successful! You can now upload videos.';
+        });
+    </script>
 </body>
 </html>
