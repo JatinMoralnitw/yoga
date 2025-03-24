@@ -53,12 +53,10 @@
     
     <!-- Firebase scripts -->
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
         
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCZmSzphanrYQC0FqTyR_OYKNB42wOythQ",
             authDomain: "manflowyoga-a36a7.firebaseapp.com",
@@ -68,37 +66,41 @@
             appId: "1:512748165114:web:1906b5e8d9d83062c5f643"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        // Logout functionality
-        const logoutBtn = document.getElementById("logoutBtn");
-        logoutBtn.addEventListener("click", async () => {
-            try {
-                await signOut(auth);
-                alert("Logged out successfully.");
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userProfile = document.getElementById("userProfile");
+                userProfile.innerHTML = `
+                    <li>${user.displayName || "User"}</li>
+                    <li>${user.email}</li>
+                    <button id="logoutBtn">Logout</button>
+                `;
+
+                document.getElementById("logoutBtn").addEventListener("click", async () => {
+                    try {
+                        await signOut(auth);
+                        alert("Logged out successfully.");
+                        window.location.href = "login.html";
+                    } catch (error) {
+                        console.error("Logout Error:", error);
+                        alert("Failed to log out. Try again.");
+                    }
+                });
+            } else {
                 window.location.href = "login.html";
-            } catch (error) {
-                console.error("Logout Error:", error);
-                alert("Failed to log out. Try again.");
             }
         });
     </script>
     
     <script>
-        // Profile menu toggle
         function toggleMenu() {
             var menu = document.getElementById("menu");
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
-            }
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
         }
         
-        // Close menu when clicking outside
         document.addEventListener("click", function(event) {
             var menu = document.getElementById("menu");
             var button = document.querySelector(".menu-button");
