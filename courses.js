@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
@@ -9,8 +9,7 @@ const firebaseConfig = {
     storageBucket: "yogadt-ed173.firebasestorage.app",
     messagingSenderId: "877729470017",
     appId: "1:877729470017:web:d6d4f90eb0b553d09a58c0"
-  };
-
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -19,17 +18,6 @@ const db = getFirestore(app);
 
 // Elements
 const courseList = document.getElementById("courseList");
-const logoutBtn = document.getElementById("logoutBtn");
-
-// Sample course descriptions (in case Firebase doesn't have them)
-const courseDescriptions = {
-    "beginner": "Perfect for newcomers to yoga practice. Learn fundamental poses and breathing techniques.",
-    "intermediate": "Build on your foundation with more challenging poses and sequences.",
-    "advanced": "Deepen your practice with complex postures and extended meditation.",
-    "prenatal": "Safe, gentle yoga designed specifically for expectant mothers.",
-    "therapeutic": "Healing-focused yoga to address physical discomfort and promote recovery.",
-    "meditation": "Focus on mindfulness and mental clarity through guided meditation sessions."
-};
 
 // Fetch available teachers (courses)
 async function fetchCourses() {
@@ -39,27 +27,29 @@ async function fetchCourses() {
         let courses = [];
 
         teachersSnapshot.forEach(doc => {
-            // Add a description if not present
             const data = doc.data();
-            if (!data.description && courseDescriptions[doc.id.toLowerCase()]) {
-                data.description = courseDescriptions[doc.id.toLowerCase()];
-            } else if (!data.description) {
-                data.description = "Explore this specialized yoga course tailored to your needs.";
-            }
             
-            courses.push({ id: doc.id, ...data });
+            // Check if the teacher has uploaded any videos
+            const hasVideos = data.videos && data.videos.length > 0;
+            
+            // Create a default description if none exists
+            const description = data.description || `Yoga course taught by ${data.name}. Experience: ${data.experience || 'Professional'} years.`;
+            
+            courses.push({ 
+                id: doc.id, 
+                name: data.name || "Yoga Course", 
+                description: description,
+                imageUrl: data.imageUrl,
+                experience: data.experience,
+                hasVideos: hasVideos,
+                videoCount: hasVideos ? data.videos.length : 0
+            });
         });
 
         return courses;
     } catch (error) {
         console.error("Error fetching courses:", error);
-        // Return some sample courses if Firebase fetch fails
-        return [
-            { id: "beginner", name: "Beginner Yoga", description: courseDescriptions.beginner },
-            { id: "intermediate", name: "Intermediate Flows", description: courseDescriptions.intermediate },
-            { id: "advanced", name: "Advanced Practice", description: courseDescriptions.advanced },
-            { id: "meditation", name: "Meditation & Mindfulness", description: courseDescriptions.meditation }
-        ];
+        return [];
     }
 }
 
@@ -103,8 +93,9 @@ onAuthStateChanged(auth, async (user) => {
         // Course name and description
         const courseInfo = document.createElement("div");
         courseInfo.innerHTML = `
-            <div class="course-name">${course.name || course.id}</div>
-            <div class="course-description">${course.description || ""}</div>
+            <div class="course-name">${course.name}</div>
+            <div class="course-description">${course.description}</div>
+            ${course.hasVideos ? `<div class="course-videos-count">Available videos: ${course.videoCount}</div>` : ''}
         `;
         
         // Course action buttons
@@ -113,12 +104,12 @@ onAuthStateChanged(auth, async (user) => {
         
         if (enrolledCourses.includes(course.id)) {
             courseActions.innerHTML = `
-                <button class="access-btn" onclick="accessCourse('${course.id}')">Access</button> 
-                <button class="remove-btn" onclick="removeCourse('${course.id}')">Remove</button>
+                <button class="access-btn" data-course-id="${course.id}">Access</button> 
+                <button class="remove-btn" data-course-id="${course.id}">Remove</button>
             `;
         } else {
             courseActions.innerHTML = `
-                <button class="add-btn" onclick="addCourse('${course.id}')">Enroll Now</button>
+                <button class="add-btn" data-course-id="${course.id}">Enroll Now</button>
             `;
         }
         
@@ -126,10 +117,40 @@ onAuthStateChanged(auth, async (user) => {
         li.appendChild(courseActions);
         courseList.appendChild(li);
     });
+    
+    // Add event listeners for buttons
+    setupButtonListeners();
 });
 
+// Setup button event listeners
+function setupButtonListeners() {
+    // Add Course buttons
+    document.querySelectorAll('.add-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const courseId = button.getAttribute('data-course-id');
+            addCourse(courseId);
+        });
+    });
+    
+    // Access Course buttons
+    document.querySelectorAll('.access-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const courseId = button.getAttribute('data-course-id');
+            accessCourse(courseId);
+        });
+    });
+    
+    // Remove Course buttons
+    document.querySelectorAll('.remove-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const courseId = button.getAttribute('data-course-id');
+            removeCourse(courseId);
+        });
+    });
+}
+
 // Add Course
-window.addCourse = async (courseId) => {
+async function addCourse(courseId) {
     const user = auth.currentUser;
     if (!user) {
         alert("You must be logged in to enroll in a course.");
@@ -148,10 +169,10 @@ window.addCourse = async (courseId) => {
         console.error("Error enrolling in course:", error);
         alert("There was an error enrolling in the course. Please try again.");
     }
-};
+}
 
 // Access Course
-window.accessCourse = async (courseId) => {
+async function accessCourse(courseId) {
     const user = auth.currentUser;
     if (!user) {
         alert("You must be logged in to access your courses.");
@@ -159,21 +180,25 @@ window.accessCourse = async (courseId) => {
     }
 
     try {
+        // Store the active course ID in user's document
         const userDocRef = doc(db, "users", user.uid);
         await updateDoc(userDocRef, {
             activeCourse: courseId
         });
-
-        alert("Loading your course content...");
-        window.location.href = "course-content.html";
+        
+        // Save the course ID in localStorage for easy access
+        localStorage.setItem("activeCourseId", courseId);
+        
+        // Redirect to the course content page with the course ID
+        window.location.href = `course-content.html?course=${courseId}`;
     } catch (error) {
         console.error("Error accessing course:", error);
         alert("There was an error accessing the course. Please try again.");
     }
-};
+}
 
 // Remove Course
-window.removeCourse = async (courseId) => {
+async function removeCourse(courseId) {
     const user = auth.currentUser;
     if (!user) {
         alert("You must be logged in to manage your courses.");
@@ -194,18 +219,9 @@ window.removeCourse = async (courseId) => {
             alert("There was an error removing the course. Please try again.");
         }
     }
-};
-
-// Logout Function
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-        try {
-            await signOut(auth);
-            alert("Logged out successfully.");
-            window.location.href = "login.html";
-        } catch (error) {
-            console.error("Logout Error:", error);
-            alert("Failed to log out. Please try again.");
-        }
-    });
 }
+
+// Make functions available to window for onclick handlers
+window.addCourse = addCourse;
+window.accessCourse = accessCourse;
+window.removeCourse = removeCourse;
