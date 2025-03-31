@@ -4,91 +4,315 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Teacher</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #7209b7;
+            --text-color: #333;
+            --light-color: #f8f9fa;
+            --border-color: #dbe0e5;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #74ebd5, #9face6);
+            padding: 2rem;
+            color: var(--text-color);
         }
-        .form-container {
-            background: #ffffffcc;
-            border-radius: 20px;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            text-align: center;
-            width: 400px;
-            border: 3px solid #f9d423;
-            animation: pulseEffect 1s infinite alternate ease-in-out;
+
+        .container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 550px;
+            overflow: hidden;
+            position: relative;
         }
-        @keyframes pulseEffect {
-            from {
-                transform: scale(1);
-                border-color: #ff4e50;
-            }
-            to {
-                transform: scale(1.05);
-                border-color: #f9d423;
-            }
-        }
-        h2 {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.2);
-        }
-        input, button {
-            display: block;
-            margin: 15px auto;
-            padding: 15px;
-            width: 90%;
-            font-size: 1.2rem;
-            border: 3px solid #ddd;
-            border-radius: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
-        }
-        input:hover {
-            border-color: #f9d423;
-        }
-        input:focus {
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-            outline: none;
-            border-color: #ff4e50;
-        }
-        button {
-            background: linear-gradient(45deg, #ff4e50, #f9d423);
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem;
             color: white;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
-            border: none;
+            text-align: center;
         }
-        button:hover {
-            transform: scale(1.15);
-            background: linear-gradient(45deg, #f9d423, #ff4e50);
+
+        .header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
-        #statusMessage {
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .form-content {
+            padding: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            transition: var(--transition);
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
             font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--light-color);
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+            outline: none;
+        }
+
+        input[type="text"]:focus + .input-icon,
+        input[type="password"]:focus + .input-icon {
+            color: var(--primary-color);
+        }
+
+        .file-input-container {
+            margin: 1.8rem 0;
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .file-input-container:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.03);
+        }
+
+        .file-input-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .file-input-button {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .file-input-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
             color: #666;
-            margin-top: 20px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: var(--light-color);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            display: none;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        button#addTeacherBtn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        button#addTeacherBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.25);
+        }
+
+        button#addTeacherBtn:active {
+            transform: translateY(0);
+        }
+
+        #statusMessage {
+            text-align: center;
+            margin-top: 1.2rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .status-success {
+            color: #10b981 !important;
+        }
+
+        .status-error {
+            color: #ef4444 !important;
+        }
+
+        /* Add responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .form-content {
+                padding: 1.5rem;
+            }
+            
+            .header h2 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h2>Add Teacher</h2>
-        <input type="text" id="teacherName" placeholder="Teacher Name">
-        <input type="password" id="teacherPassword" placeholder="Password">
-        <input type="text" id="teacherContact" placeholder="Contact Number">
-        <input type="text" id="teacherExperience" placeholder="Experience (Years)">
-        <input type="text" id="teacherImageUrl" placeholder="Image URL">
-        <button id="addTeacherBtn">Add Teacher</button>
-        <p id="statusMessage"></p>
+    <div class="container">
+        <div class="header">
+            <h2>Add Teacher</h2>
+            <p>Enter the teacher information below</p>
+        </div>
+        
+        <div class="form-content">
+            <div class="form-group">
+                <label for="teacherName">Teacher Name</label>
+                <div class="input-group">
+                    <input type="text" id="teacherName" placeholder="Enter full name">
+                    <i class="input-icon fas fa-user"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="teacherPassword">Password</label>
+                <div class="input-group">
+                    <input type="password" id="teacherPassword" placeholder="Create password">
+                    <i class="input-icon fas fa-lock"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="teacherContact">Contact Number</label>
+                <div class="input-group">
+                    <input type="text" id="teacherContact" placeholder="Enter contact number">
+                    <i class="input-icon fas fa-phone"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="teacherExperience">Experience (Years)</label>
+                <div class="input-group">
+                    <input type="text" id="teacherExperience" placeholder="Enter years of experience">
+                    <i class="input-icon fas fa-briefcase"></i>
+                </div>
+            </div>
+            
+            <div class="file-input-container">
+                <div class="file-input-icon">
+                    <i class="fas fa-image"></i>
+                </div>
+                <p>Upload teacher profile image</p>
+                <div class="file-input-button">Choose File</div>
+                <input type="file" id="teacherImage" accept="image/*">
+                <div class="file-name" id="fileName">No file chosen</div>
+            </div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <button id="addTeacherBtn">Add Teacher</button>
+            <p id="statusMessage"></p>
+        </div>
     </div>
+
     <script type="module" src="add-teacher.js"></script>
+    <script>
+        // Simple script to update file name display
+        document.getElementById('teacherImage').addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+            document.getElementById('fileName').textContent = fileName;
+        });
+    </script>
 </body>
 </html>
