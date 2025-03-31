@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Yoga for Everyone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Basic styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f3f0;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: #5d4037;
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-sidebar {
+            flex: 1;
+            max-width: 250px;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-content {
+            flex: 3;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-nav a {
+            display: block;
+            padding: 0.5rem;
+            color: #5d4037;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background-color: #f0e6e2;
+        }
+        
+        h1 {
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            color: #5d4037;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0e6e2;
+        }
+        
+        .message-list {
+            margin-bottom: 2rem;
+        }
+        
+        .message-card {
+            background-color: #f9f9f9;
+            border-left: 4px solid #8d6e63;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+        
+        .message-card.unread {
+            background-color: #f0e6e2;
+            border-left-color: #eb977e;
+        }
+        
+        .message-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-name {
+            font-weight: 600;
+            color: #5d4037;
+        }
+        
+        .message-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .message-subject {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-email {
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .message-content {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+        
+        .message-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-reply {
+            background-color: #8d6e63;
+            color: white;
+        }
+        
+        .btn-reply:hover {
+            background-color: #6d4c41;
+        }
+        
+        .btn-mark {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-mark:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background-color: #d32f2f;
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-item {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background-color: #f0e6e2;
+            color: #5d4037;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+        
+        .filter-item:hover, .filter-item.active {
+            background-color: #8d6e63;
+            color: white;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #5d4037;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+        }
+        
+        .no-messages {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        /* Table styles for newsletter */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f0e6e2;
+            color: #5d4037;
+            font-weight: 500;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .dashboard-sidebar {
+                max-width: 100%;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Yoga for Everyone - Admin Dashboard</h1>
+    </header>
+    
+    <main>
+        <div class="dashboard-container">
+            <div class="dashboard-sidebar">
+                <ul class="sidebar-nav">
+                    <li><a href="#" class="active tab-link" data-tab="messages">Contact Messages</a></li>
+                    <li><a href="#" class="tab-link" data-tab="newsletter">Newsletter Subscribers</a></li>
+                    <li><a href="yoga.html">Back to Website</a></li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
+                </ul>
+            </div>
+            
+            <div class="dashboard-content">
+                <!-- Messages Tab -->
+                <div id="messages" class="tab-content active">
+                    <h2>Contact Messages</h2>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-messages">0</div>
+                            <div class="stat-label">Total Messages</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="unread-messages">0</div>
+                            <div class="stat-label">Unread Messages</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="today-messages">0</div>
+                            <div class="stat-label">Messages Today</div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-bar">
+                        <div class="filter-item active" data-filter="all">All Messages</div>
+                        <div class="filter-item" data-filter="unread">Unread</div>
+                        <div class="filter-item" data-filter="read">Read</div>
+                    </div>
+                    
+                    <div class="message-list" id="message-container">
+                        <div class="loading">Loading messages...</div>
+                    </div>
+                </div>
+                
+                <!-- Newsletter Tab -->
+                <div id="newsletter" class="tab-content">
+                    <h2>Newsletter Subscribers</h2>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-subscribers">0</div>
+                            <div class="stat-label">Total Subscribers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="new-subscribers">0</div>
+                            <div class="stat-label">New This Month</div>
+                        </div>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Subscription Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscribers-table">
+                            <tr>
+                                <td colspan="4" class="loading">Loading subscribers...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            getDocs, 
+            doc, 
+            updateDoc,
+            deleteDoc,
+            query,
+            orderBy,
+            where,
+            Timestamp
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
+            authDomain: "yogadt-ed173.firebaseapp.com",
+            projectId: "yogadt-ed173",
+            storageBucket: "yogadt-ed173.firebasestorage.app",
+            messagingSenderId: "877729470017",
+            appId: "1:877729470017:web:d6d4f90eb0b553d09a58c0"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // User is not logged in, redirect to login page
+                window.location.href = "login.html";
+            } else {
+                // Load data
+                loadContactMessages();
+                loadNewsletterSubscribers();
+            }
+        });
+        
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = "login.html";
+            } catch (error) {
+                console.error("Error signing out:", error);
+            }
+        });
+        
+        // Tab functionality
+        const tabLinks = document.querySelectorAll('.tab-link');
+        tabLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all tabs
+                tabLinks.forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                link.classList.add('active');
+                const tabId = link.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Filter functionality
+        const filterItems = document.querySelectorAll('.filter-item');
+        filterItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all filters
+                filterItems.forEach(f => f.classList.remove('active'));
+                
+                // Add active class to clicked filter
+                item.classList.add('active');
+                
+                // Apply filter
+                const filter = item.getAttribute('data-filter');
+                loadContactMessages(filter);
+            });
+        });
+        
+        // Format date
+        function formatDate(timestamp) {
+            if (!timestamp) return 'Unknown';
+            
+            const date = timestamp.toDate();
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // Load contact messages
+        async function loadContactMessages(filter = 'all') {
+            const messageContainer = document.getElementById('message-container');
+            messageContainer.innerHTML = '<div class="loading">Loading messages...</div>';
+            
+            try {
+                // Create query based on filter
+                let messagesQuery;
+                if (filter === 'unread') {
+                    messagesQuery = query(
+                        collection(db, "contactMessages"),
+                        where("status", "==", "unread"),
+                        orderBy("timestamp", "desc")
+                    );
+                } else if (filter === 'read') {
+                    messagesQuery = query(
+                        collection(db, "contactMessages"),
+                        where("status", "==", "read"),
+                        orderBy("timestamp", "desc")
+                    );
+                } else {
+                    messagesQuery = query(
+                        collection(db, "contactMessages"),
+                        orderBy("timestamp", "desc")
+                    );
+                }
+                
+                const snapshot = await getDocs(messagesQuery);
+                
+                // Update stats
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayTimestamp = Timestamp.fromDate(today);
+                
+                let totalMessages = 0;
+                let unreadMessages = 0;
+                let todayMessages = 0;
+                
+                // Check if there are messages
+                if (snapshot.empty) {
+                    messageContainer.innerHTML = '<div class="no-messages">No messages found.</div>';
+                    return;
+                }
+                
+                // Clear container
+                messageContainer.innerHTML = '';
+                
+                // Process messages
+                snapshot.forEach((doc) => {
+                    const message = doc.data();
+                    const messageId = doc.id;
+                    
+                    // Update counters
+                    totalMessages++;
+                    if (message.status === 'unread') unreadMessages++;
+                    if (message.timestamp && message.timestamp >= todayTimestamp) todayMessages++;
+                    
+                    // Create message card
+                    const messageCard = document.createElement('div');
+                    messageCard.className = `message-card ${message.status}`;
+                    messageCard.innerHTML = `
+                        <div class="message-header">
+                            <div class="message-name">${message.name}</div>
+                            <div class="message-date">${formatDate(message.timestamp)}</div>
+                        </div>
+                        <div class="message-subject">${message.subject}</div>
+                        <div class="message-email"><a href="mailto:${message.email}">${message.email}</a></div>
+                        <div class="message-content">${message.message}</div>
+                        <div class="message-actions">
+                            <button class="btn-reply" data-email="${message.email}">Reply</button>
+                            <button class="btn-mark" data-id="${messageId}" data-status="${message.status}">
+                                ${message.status === 'unread' ? 'Mark as Read' : 'Mark as Unread'}
+                            </button>
+                            <button class="btn-delete" data-id="${messageId}">Delete</button>
+                        </div>
+                    `;
+                    
+                    messageContainer.appendChild(messageCard);
+                });
+                
+                // Update stats display
+                document.getElementById('total-messages').textContent = totalMessages;
+                document.getElementById('unread-messages').textContent = unreadMessages;
+                document.getElementById('today-messages').textContent = todayMessages;
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.btn-reply').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const email = btn.getAttribute('data-email');
+                        window.location.href = `mailto:${email}`;
+                    });
+                });
+                
+                document.querySelectorAll('.btn-mark').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const messageId = btn.getAttribute('data-id');
+                        const currentStatus = btn.getAttribute('data-status');
+                        const newStatus = currentStatus === 'unread' ? 'read' : 'unread';
+                        
+                        try {
+                            await updateDoc(doc(db, "contactMessages", messageId), {
+                                status: newStatus
+                            });
+                            
+                            // Reload messages
+                            loadContactMessages(filter);
+                        } catch (error) {
+                            console.error("Error updating message:", error);
+                            alert("Failed to update message status.");
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        if (confirm("Are you sure you want to delete this message?")) {
+                            const messageId = btn.getAttribute('data-id');
+                            
+                            try {
+                                await deleteDoc(doc(db, "contactMessages", messageId));
+                                
+                                // Reload messages
+                                loadContactMessages(filter);
+                            } catch (error) {
+                                console.error("Error deleting message:", error);
+                                alert("Failed to delete message.");
+                            }
+                        }
+                    });
+                });
+                
+            } catch (error) {
+                console.error("Error loading messages:", error);
+                messageContainer.innerHTML = '<div class="no-messages">Error loading messages. Please try again.</div>';
+            }
+        }
+        
+        // Load newsletter subscribers
+        async function loadNewsletterSubscribers() {
+            const subscribersTable = document.getElementById('subscribers-table');
+            
+            try {
+                const q = query(
+                    collection(db, "newsletterSubscriptions"),
+                    orderBy("timestamp", "desc")
+                );
+                
+                const snapshot = await getDocs(q);
+                
+                // Update stats
+                let totalSubscribers = 0;
+                let newSubscribers = 0;
+                
+                // Get first day of current month
+                const today = new Date();
+                const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                const firstDayTimestamp = Timestamp.fromDate(firstDayOfMonth);
+                
+                // Check if there are subscribers
+                if (snapshot.empty) {
+                    subscribersTable.innerHTML = '<tr><td colspan="4" class="no-messages">No subscribers found.</td></tr>';
+                    return;
+                }
+                
+                // Clear table
+                subscribersTable.innerHTML = '';
+                
+                // Process subscribers
+                snapshot.forEach((doc) => {
+                    const subscriber = doc.data();
+                    const subscriberId = doc.id;
+                    
+                    // Update counters
+                    totalSubscribers++;
+                    if (subscriber.timestamp && subscriber.timestamp >= firstDayTimestamp) newSubscribers++;
+                    
+                    // Create table row
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${subscriber.email}</td>
+                        <td>${formatDate(subscriber.timestamp)}</td>
+                        <td>${subscriber.status || 'active'}</td>
+                        <td>
+                            <button class="btn-mark" data-id="${subscriberId}" data-status="${subscriber.status || 'active'}">
+                                ${subscriber.status === 'inactive' ? 'Activate' : 'Deactivate'}
+                            </button>
+                            <button class="btn-delete" data-id="${subscriberId}">Delete</button>
+                        </td>
+                    `;
+                    
+                    subscribersTable.appendChild(row);
+                });
+                
+                // Update stats display
+                document.getElementById('total-subscribers').textContent = totalSubscribers;
+                document.getElementById('new-subscribers').textContent = newSubscribers;
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('#subscribers-table .btn-mark').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const subscriberId = btn.getAttribute('data-id');
+                        const currentStatus = btn.getAttribute('data-status');
+                        const newStatus = currentStatus === 'inactive' ? 'active' : 'inactive';
+                        
+                        try {
+                            await updateDoc(doc(db, "newsletterSubscriptions", subscriberId), {
+                                status: newStatus
+                            });
+                            
+                            // Reload subscribers
+                            loadNewsletterSubscribers();
+                        } catch (error) {
+                            console.error("Error updating subscriber:", error);
+                            alert("Failed to update subscriber status.");
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('#subscribers-table .btn-delete').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        if (confirm("Are you sure you want to delete this subscriber?")) {
+                            const subscriberId = btn.getAttribute('data-id');
+                            
+                            try {
+                                await deleteDoc(doc(db, "newsletterSubscriptions", subscriberId));
+                                
+                                // Reload subscribers
+                                loadNewsletterSubscribers();
+                            } catch (error) {
+                                console.error("Error deleting subscriber:", error);
+                                alert("Failed to delete subscriber.");
+                            }
+                        }
+                    });
+                });
+                
+            } catch (error) {
+                console.error("Error loading subscribers:", error);
+                subscribersTable.innerHTML = '<tr><td colspan="4" class="no-messages">Error loading subscribers. Please try again.</td></tr>';
+            }
+        }
+    </script>
+</body>
+</html>
