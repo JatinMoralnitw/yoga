@@ -104,11 +104,11 @@
         <nav>
             <ul style="display: flex">
                 <div class="dropdown">
-                    <div class="menu-button" onclick="toggleMenu()">Profile</div>
+                    <div class="menu-button" onclick="toggleMenu()"><img src="profile.avif" ></div>
+                    <br>
                     <div id="menu" class="menu">
-                        <ul class="profile">
-                            <li>sumit</li>
-                            <button id="logoutBtn">Logout</button>
+                        <ul class="profile" id="userProfile">
+                            <li>Loading...</li>
                         </ul>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                     <li><a href="yoga.html">HOME</a></li>
                     <li><a href="courses.html">COURSES</a></li>
                     <li><a href="yogabodyproblem.html">YOGA FOR BODY PAIN</a></li>
-                    <li><a href="yogaasana.html">YOGA ASANAS</a></li>
+                    <li><a href="videos.html">YOGA ASANAS</a></li>
                     <li><a href="blog.html">BLOG</a></li>
                     <li><a href="yogacontactus.html">CONTACT US</a></li>
                 </div>
@@ -153,11 +153,20 @@
     <footer>
         <p>&copy; 2025 Yoga for Everyone | All Rights Reserved</p>
     </footer>
-    <script type="module">
+        <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
         
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
             authDomain: "yogadt-ed173.firebaseapp.com",
@@ -166,36 +175,112 @@
             messagingSenderId: "877729470017",
             appId: "1:877729470017:web:d6d4f90eb0b553d09a58c0"
         };
-
+        
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        onAuthStateChanged(auth, (user) => {
+        
+        // Check if user data is in localStorage first (from previous login)
+        function updateProfileFromStorage() {
+            try {
+                const userData = JSON.parse(localStorage.getItem("userData"));
+                if (userData && userData.fullName && userData.email) {
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Name: ${userData.fullName}</strong></li>
+                        <li>Email: ${userData.email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    
+                    // Add logout event listener
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                    return true;
+                }
+            } catch (error) {
+                console.error("Error reading from localStorage:", error);
+            }
+            return false;
+        }
+        
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem("userData"); // Clear stored user data
+                alert("Logged out successfully.");
+                window.location.href = "login.html"; // Redirect to login page after logout
+            } catch (error) {
+                console.error("Logout Error:", error);
+            }
+        }
+        
+        // Try to update from localStorage first
+        const updatedFromStorage = updateProfileFromStorage();
+        
+        // Check if a user is logged in and fetch their name from Firestore
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const userProfile = document.getElementById("userProfile");
-                userProfile.innerHTML = `
-                    <li>${user.displayName || "User"}</li>
-                    <li>${user.email}</li>
-                    <button id="logoutBtn">Logout</button>
-                `;
-
-                document.getElementById("logoutBtn").addEventListener("click", async () => {
-                    try {
-                        await signOut(auth);
-                        alert("Logged out successfully.");
-                        window.location.href = "login.html";
-                    } catch (error) {
-                        console.error("Logout Error:", error);
-                        alert("Failed to log out. Try again.");
+                console.log("User is logged in:", user.email);
+                
+                // If we already updated from localStorage, no need to fetch again
+                if (updatedFromStorage) return;
+                
+                try {
+                    // Fetch user data from Firestore
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    let fullName = "User"; // Default name
+                    let email = user.email;
+                    
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        fullName = userData.fullName || "User";
+                        
+                        // Store in localStorage for future use
+                        localStorage.setItem("userData", JSON.stringify({
+                            fullName: fullName,
+                            email: email,
+                            userId: user.uid
+                        }));
+                    } else {
+                        console.warn("No user document found in Firestore.");
                     }
-                });
+                    
+                    // Update the profile dropdown
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Name: ${fullName}</strong></li>
+                        <li>Email: ${email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    
+                    // Add logout event listener
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                    
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    // Still show something in the profile even if there's an error
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Welcome</strong></li>
+                        <li>${user.email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                }
             } else {
-                window.location.href = "login.html";
+                // User is not logged in
+                console.log("No user logged in");
+                localStorage.removeItem("userData"); // Clear any stored user data
+                
+                // Redirect to login page if not already there
+                if (!window.location.href.includes("login.html")) {
+                    window.location.href = "login.html";
+                }
             }
         });
     </script>
-    
+
     <script>
         function toggleMenu() {
             var menu = document.getElementById("menu");
