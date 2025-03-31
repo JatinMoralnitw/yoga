@@ -1,74 +1,473 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Yoga for Everyone</title>
+    <link rel="stylesheet" href="yogacontactus.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <p>Your Yoga Space</p>
+        <hr>
+        <nav>
+            <ul style="display: flex">
+                <div class="dropdown">
+                    <div class="menu-button" onclick="toggleMenu()"><img src="profile.avif"></div>
+                    <br>
+                    <div id="menu" class="menu">
+                        <ul class="profile" id="userProfile">
+                            <li>Loading...</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-left: auto;display: flex;"> 
+                    <li><a href="yoga.html">HOME</a></li>
+                    <li><a href="courses.html">COURSES</a></li>
+                    <li><a href="yogabodyproblem.html">YOGA FOR BODY PAIN</a></li>
+                    <li><a href="videos.html">YOGA ASANAS</a></li>
+                    <li><a href="blog.html">BLOG</a></li>
+                    <li><a href="yogacontactus.html" class="active">CONTACT US</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="contact-banner">
+            <div class="banner-content">
+                <h1>Connect With Us</h1>
+                <p>We're here to guide you on your yoga journey</p>
+            </div>
+        </section>
+        
+        <section id="contact-container">
+            <div class="contact-form-container">
+                <h2>Send Us a Message</h2>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="What is this regarding?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="How can we help you?" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+            
+            <div class="contact-info-container">
+                <h2>Get in Touch</h2>
+                <p class="contact-intro">We'd love to hear from you! Whether you have questions about our classes, need guidance on your yoga journey, or want to provide feedback, we're here for you.</p>
+                
+                <div class="contact-item">
+                    <h3>Visit Our Studio</h3>
+                    <p>123 Serenity Lane, Harmony Hills<br>
+                    Yoga City, YG 12345</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Phone Number</h3>
+                    <p>+1 (123) 456-7890</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Email Us</h3>
+                    <p><a href="mailto:info@yogaforeveryone.com">info@yogaforeveryone.com</a></p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Studio Hours</h3>
+                    <p>Monday - Friday: 6:00 AM - 9:00 PM<br>
+                    Saturday & Sunday: 8:00 AM - 6:00 PM</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Follow Us</h3>
+                    <ul class="social-media">
+                        <li><a href="https://twitter.com/yourhandle" target="_blank">Twitter</a></li>
+                        <li><a href="https://facebook.com/yourhandle" target="_blank">Facebook</a></li>
+                        <li><a href="https://instagram.com/yourhandle" target="_blank">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- New Map Section -->
+        <section id="map-section">
+            <h2>Find Our Studio</h2>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00701!3d40.71277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjAiTiA3NMKwMDAnMjUuMiJX!5e0!3m2!1sen!2sus!4v1617293702806!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </section>
+        
+        <!-- New Testimonials Section -->
+        <section id="testimonials-section">
+            <h2>What Our Community Says</h2>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">I've been practicing yoga for years, but since joining Yoga for Everyone, my practice has reached new heights. The instructors are knowledgeable, supportive, and truly care about each student's journey.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="sarah.jpg" alt="Sarah J.">
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>Sarah J.</h4>
+                            <p>Member since 2023</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">As a complete beginner, I was intimidated to start yoga. The team at Yoga for Everyone made me feel welcome from day one. The beginner classes are perfectly paced, and I've seen tremendous improvement in my flexibility and stress levels.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="michael.jpeg" alt="Michael T.">
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>Michael T.</h4>
+                            <p>Member since 2024</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">The therapeutic yoga classes have been life-changing for my chronic back pain. The instructors' attention to detail and personalized modifications have helped me build strength without discomfort. I can't recommend this studio enough!</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="elena.jpg" alt="Elena R.">
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>Elena R.</h4>
+                            <p>Member since 2022</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- New FAQ Section -->
+        <section id="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">Do I need to bring my own mat?</div>
+                    <div class="faq-answer">
+                        <p>While we do provide mats for all students, many practitioners prefer to bring their own for hygiene reasons. We also sell high-quality yoga mats at our studio if you're interested in purchasing one.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">I'm a complete beginner. Which class should I start with?</div>
+                    <div class="faq-answer">
+                        <p>We recommend our "Yoga Foundations" class for complete beginners. This class focuses on basic poses, proper alignment, and breathing techniques. We also offer a special "Intro to Yoga" workshop once a month that provides a comprehensive introduction to yoga practice.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How often should I practice yoga?</div>
+                    <div class="faq-answer">
+                        <p>For beginners, we recommend 2-3 sessions per week to build strength and flexibility without overexertion. Consistency is more important than frequency - even one class per week will provide benefits if maintained regularly. Listen to your body and adjust your practice accordingly.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Do you offer private yoga sessions?</div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer one-on-one sessions with our experienced instructors. Private sessions are perfect for addressing specific concerns, working on particular poses, or if you prefer personalized attention. Contact us to schedule a private session or learn more about our packages.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What are your membership options?</div>
+                    <div class="faq-answer">
+                        <p>We offer several membership options to suit different needs and budgets:
+                           <br>- Drop-in classes: $20 per class
+                           <br>- 10-class pass: $180 (valid for 3 months)
+                           <br>- Monthly unlimited: $140 per month
+                           <br>- Annual membership: $1,400 (save $280 compared to monthly)
+                           <br>- Student/Senior discount: 15% off any package
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="newsletter">
+            <div class="newsletter-container">
+                <h2>Subscribe to Our Newsletter</h2>
+                <p>Stay up to date with our latest classes, workshops, and yoga tips!</p>
+                <form id="newsletter-form">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Yoga for Everyone | All Rights Reserved</p>
+    </footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
+            authDomain: "yogadt-ed173.firebaseapp.com",
+            projectId: "yogadt-ed173",
+            storageBucket: "yogadt-ed173.firebasestorage.app",
+            messagingSenderId: "877729470017",
+            appId: "1:877729470017:web:d6d4f90eb0b553d09a58c0"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Check if user data is in localStorage first (from previous login)
+        function updateProfileFromStorage() {
+            try {
+                const userData = JSON.parse(localStorage.getItem("userData"));
+                if (userData && userData.fullName && userData.email) {
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Name: ${userData.fullName}</strong></li>
+                        <li>Email: ${userData.email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    
+                    // Add logout event listener
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                    return true;
+                }
+            } catch (error) {
+                console.error("Error reading from localStorage:", error);
+            }
+            return false;
+        }
+        
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem("userData"); // Clear stored user data
+                alert("Logged out successfully.");
+                window.location.href = "login.html"; // Redirect to login page after logout
+            } catch (error) {
+                console.error("Logout Error:", error);
+            }
+        }
+        
+        // Try to update from localStorage first
+        const updatedFromStorage = updateProfileFromStorage();
+        
+        // Check if a user is logged in and fetch their name from Firestore
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log("User is logged in:", user.email);
+                
+                // If we already updated from localStorage, no need to fetch again
+                if (updatedFromStorage) return;
+                
+                try {
+                    // Fetch user data from Firestore
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    let fullName = "User"; // Default name
+                    let email = user.email;
+                    
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        fullName = userData.fullName || "User";
+                        
+                        // Store in localStorage for future use
+                        localStorage.setItem("userData", JSON.stringify({
+                            fullName: fullName,
+                            email: email,
+                            userId: user.uid
+                        }));
+                    } else {
+                        console.warn("No user document found in Firestore.");
+                    }
+                    
+                    // Update the profile dropdown
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Name: ${fullName}</strong></li>
+                        <li>Email: ${email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    
+                    // Add logout event listener
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                    
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    // Still show something in the profile even if there's an error
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Welcome</strong></li>
+                        <li>${user.email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                }
+            } else {
+                // User is not logged in
+                console.log("No user logged in");
+                localStorage.removeItem("userData"); // Clear any stored user data
+                
+                // Redirect to login page if not already there
+                if (!window.location.href.includes("login.html")) {
+                    window.location.href = "login.html";
+                }
+            }
+        });
+    </script>
 
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-header {
-    background: #4CAF50;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-}
-
-main {
-    padding: 20px;
-}
-
-#contact-info {
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin: 20px auto;
-    max-width: 600px;
-}
-
-h2 {
-    margin-bottom: 20px;
-}
-
-.contact-item {
-    margin-bottom: 15px;
-}
-
-.contact-item h3 {
-    color: #4CAF50;
-}
-
-.social-media {
-    list-style-type: none;
-    padding: 0;
-}
-
-.social-media li {
-    display: inline;
-    margin-right: 15px;
-}
-
-.social-media a {
-    text-decoration: none;
-    color: #4CAF50;
-}
-
-.social-media a:hover {
-    text-decoration: underline;
-}
-
-footer {
-    text-align: center;
-    padding: 10px 0;
-    background: #333;
-    color: white;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    margin-top: 20px;
-}
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+        
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("menu");
+            var button = document.querySelector(".menu-button");
+            
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = "none";
+            }
+        });
+        
+        // Contact form submission handler
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+        
+        // Newsletter form submission handler
+        document.getElementById('newsletter-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Thank you for subscribing to our newsletter!');
+            this.reset();
+        });
+        
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(function(question) {
+            question.addEventListener('click', function() {
+                // Toggle active class on the question
+                this.classList.toggle('active');
+                
+                // Toggle show class on the answer
+                var answer = this.nextElementSibling;
+                answer.classList.toggle('show');
+            });
+        });
+    </script>
+    <script>
+        // First, add this script to your yogacontactus.html file
+        // Place it right before the closing </body> tag
+        
+        // Import required Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { 
+        getFirestore, 
+        collection, 
+        addDoc, 
+        serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+        
+        
+        // Contact form submission handler
+        document.getElementById('contact-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        // Get form data
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        
+        // Show loading state
+        const submitBtn = document.querySelector('.submit-btn');
+        const originalBtnText = submitBtn.textContent;
+        submitBtn.textContent = "Sending...";
+        submitBtn.disabled = true;
+        
+        try {
+         // Add a new document to the "contactMessages" collection
+         await addDoc(collection(db, "contactMessages"), {
+             name: name,
+             email: email,
+             subject: subject || "No Subject",
+             message: message,
+             timestamp: serverTimestamp(),
+             status: "unread"
+         });
+         
+         // Show success message
+         alert('Thank you for your message! We will get back to you soon.');
+         this.reset();
+        } catch (error) {
+         console.error("Error sending message: ", error);
+         alert('Sorry, there was an error sending your message. Please try again later.');
+        } finally {
+         // Reset button state
+         submitBtn.textContent = originalBtnText;
+         submitBtn.disabled = false;
+        }
+        });
+        
+        // Newsletter form submission handler - add this to save newsletter subscriptions too
+        document.getElementById('newsletter-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        // Get form data
+        const email = this.querySelector('input[type="email"]').value;
+        
+        try {
+         // Add a new document to the "newsletterSubscriptions" collection
+         await addDoc(collection(db, "newsletterSubscriptions"), {
+             email: email,
+             timestamp: serverTimestamp(),
+             status: "active"
+         });
+         
+         // Show success message
+         alert('Thank you for subscribing to our newsletter!');
+         this.reset();
+        } catch (error) {
+         console.error("Error subscribing to newsletter: ", error);
+         alert('Sorry, there was an error subscribing you to the newsletter. Please try again later.');
+        }
+        });
+    </script>
+</body>
+</html>
