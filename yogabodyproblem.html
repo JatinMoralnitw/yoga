@@ -3,97 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoga for Body Problems</title>
+    <title>Yoga for Body Problems | Your Yoga Space</title>
     <link rel="stylesheet" href="yogabodyproblem.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>Yoga for Body Problems</h1>
+        <p>Your Yoga Space</p>
+        <hr>
+        <nav>
+            <ul style="display: flex">
+                <div class="dropdown">
+                    <div class="menu-button" onclick="toggleMenu()"><img src="profile.avif"></div>
+                    <br>
+                    <div id="menu" class="menu">
+                        <ul class="profile" id="userProfile">
+                            <li>Loading...</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-left: auto;display: flex;"> 
+                    <li><a href="yoga.html">HOME</a></li>
+                    <li><a href="courses.html">COURSES</a></li>
+                    <li><a href="yogabodyproblem.html">YOGA FOR BODY PAIN</a></li>
+                    <li><a href="videos.html">YOGA ASANAS</a></li>
+                    <li><a href="blog.html">BLOG</a></li>
+                    <li><a href="yogacontactus.html">CONTACT US</a></li>
+                </div>
+            </ul>
+        </nav>
     </header>
-    <main>
-        <section id="body-problems">
-            <h2>Select a Body Problem</h2>
-            <select id="problem-select">
-                <option value="">--Select a Problem--</option>
+    
+    <div class="body-problems-container">
+        <h1 class="page-title">Yoga Therapy for Pain Relief</h1>
+        <p class="subtitle">Discover personalized yoga practices to address your specific body pain and discomfort</p>
+        
+        <div class="options-container">
+            <div class="option-card" onclick="selectProblem('back-pain')">
+                <div class="option-image" style="background-image: url('backpain.png');"></div>
+                <div class="option-content">
+                    <h3 class="option-title">Back Pain</h3>
+                    <p class="option-description">Gentle stretches and poses to relieve tension and strengthen your back</p>
+                </div>
+            </div>
+            
+            <div class="option-card" onclick="selectProblem('neck-pain')">
+                <div class="option-image" style="background-image: url('neckpain.png');"></div>
+                <div class="option-content">
+                    <h3 class="option-title">Neck Pain</h3>
+                    <p class="option-description">Release neck tension and improve mobility with targeted yoga practices</p>
+                </div>
+            </div>
+            
+            <div class="option-card" onclick="selectProblem('joint-pain')">
+                <div class="option-image" style="background-image: url('jointpain.jpg');"></div>
+                <div class="option-content">
+                    <h3 class="option-title">Joint Pain</h3>
+                    <p class="option-description">Relieve arthritis symptoms and improve joint flexibility</p>
+                </div>
+            </div>
+            
+            <div class="option-card" onclick="selectProblem('stress')">
+                <div class="option-image" style="background-image: url('stress.jpg');"></div>
+                <div class="option-content">
+                    <h3 class="option-title">Stress & Anxiety</h3>
+                    <p class="option-description">Calming practices to release tension and quiet your mind</p>
+                </div>
+            </div>
+            
+            <div class="option-card" onclick="selectProblem('shoulder-pain')">
+                <div class="option-image" style="background-image: url('shoulder.jpg');"></div>
+                <div class="option-content">
+                    <h3 class="option-title">Shoulder Pain</h3>
+                    <p class="option-description">Open tight shoulders and improve range of motion</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-form">
+            <h2 class="form-title">Find Your Personalized Practice</h2>
+            <select id="problem-select" class="custom-select">
+                <option value="">-- Select a Specific Issue --</option>
                 <option value="back-pain">Back Pain</option>
                 <option value="neck-pain">Neck Pain</option>
                 <option value="joint-pain">Joint Pain</option>
-                <option value="stress">Stress</option>
+                <option value="stress">Stress & Anxiety</option>
                 <option value="shoulder-pain">Shoulder Pain</option>
+                <option value="sciatica">Sciatica</option>
+                <option value="headache">Headaches & Migraines</option>
+                <option value="insomnia">Sleep Issues</option>
             </select>
-            <button id="submit-btn">Get Recommendations</button>
-        </section>
-
-        <section id="results" class="hidden">
-            <h2>Recommended Asanas</h2>
-            <div id="asana-results">
-                <h3 id="asana-name"></h3>
-                <img id="asana-image" src="" alt="" style="max-width: 100%; display: none;">
-                <h4>Things to Avoid:</h4>
-                <ul id="avoid-list"></ul>
+            
+            <div class="or-divider">OR</div>
+            
+            <textarea id="description" class="custom-textarea" placeholder="Describe your pain or discomfort in detail... (For example: 'I have lower back pain that worsens when sitting for long periods')"></textarea>
+            
+            <button id="submit-btn" class="submit-btn">Find Relief Practices</button>
+        </div>
+        
+        <div id="results" class="results-container">
+            <h2 class="result-title">Your Personalized Yoga Practice</h2>
+            
+            <div class="video-container">
+                <iframe id="asana-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-        </section>
-    </main>
-
+            
+            <div class="recommendations">
+                <h3 class="recommendation-title">Additional Recommendations</h3>
+                <ul class="recommendation-list" id="recommendations-list">
+                    <!-- Dynamically filled by JavaScript -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    
     <footer>
-        <p style="text-align: center;">&copy; 2025 Yoga for Everyone</p>
+        <p>&copy; 2025 Your Yoga Space | All Rights Reserved</p>
     </footer>
-
+    
+    <!-- Toggle menu script -->
     <script>
-        // Yoga Asana Data
-        const yogaAsanas = {
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+        
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("menu");
+            var button = document.querySelector(".menu-button");
+            
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = "none";
+            }
+        });
+    </script>
+    
+    <!-- Yoga content script -->
+    <script>
+        // Define yoga videos and recommendations
+        const yogaContent = {
             "back-pain": {
-                name: "Bhujangasana (Cobra Pose)",
-                image: "y2.jpeg", // Replace with actual image URL
-                avoid: ["Forward bending", "Heavy lifting", "Sudden twisting movements"]
+                videoUrl: "https://www.youtube.com/embed/XeXz8fIZDCE",
+                title: "Yoga for Back Pain Relief",
+                recommendations: [
+                    "Practice Cat-Cow pose daily to increase spine flexibility",
+                    "Avoid forward bends when pain is acute",
+                    "Use props like blocks and bolsters for support",
+                    "Focus on core strengthening exercises",
+                    "Apply heat before practice to relax muscles"
+                ]
             },
             "neck-pain": {
-                name: "Matsyasana (Fish Pose)",
-                image: "fishpose.jpeg", // Replace with actual image URL
-                avoid: ["Rapid neck movements", "Sleeping without proper neck support"]
+                videoUrl: "https://www.youtube.com/embed/X3-gKPNyrTA",
+                title: "Yoga for Neck Tension Relief",
+                recommendations: [
+                    "Practice gentle neck rotations throughout the day",
+                    "Check your pillow height and sleeping position",
+                    "Reduce screen time and improve ergonomics",
+                    "Use a warm towel on your neck before practice",
+                    "Incorporate shoulder rolls and upper back stretches"
+                ]
             },
             "joint-pain": {
-                name: "Vrikshasana (Tree Pose)",
-                image: "vrikshasana.jpeg", // Replace with actual image URL
-                avoid: ["Overstretching", "High-impact movements"]
+                videoUrl: "https://www.youtube.com/embed/gRYH3e1Bp24",
+                title: "Gentle Yoga for Joint Pain",
+                recommendations: [
+                    "Practice in a warm room to improve joint mobility",
+                    "Move slowly and with awareness",
+                    "Use a chair for support when needed",
+                    "Focus on range of motion rather than intensity",
+                    "Try warm water practices like aqua yoga"
+                ]
             },
             "stress": {
-                name: "Balasana (Child's Pose)",
-                image: "https://www.yogajournal.com/wp-content/uploads/2021/11/childs-pose.jpg", // Replace with actual image URL
-                avoid: ["Holding breath", "Overexertion"]
+                videoUrl: "https://www.youtube.com/embed/hJbRpHZr_d0",
+                title: "Yoga for Stress and Anxiety Relief",
+                recommendations: [
+                    "Practice deep breathing for 5 minutes daily",
+                    "Try Yoga Nidra for deep relaxation",
+                    "Incorporate meditation into your routine",
+                    "Use lavender essential oil during practice",
+                    "Focus on forward folds and restorative poses"
+                ]
             },
             "shoulder-pain": {
-                name: "Gomukhasana (Cow Face Pose)",
-                image: "https://www.yogajournal.com/wp-content/uploads/2021/11/cow-face-pose.jpg", // Replace with actual image URL
-                avoid: ["Overstretching shoulders", "Sudden jerks"]
+                videoUrl: "https://www.youtube.com/embed/4vTJHUDB5ak",
+                title: "Yoga for Shoulder Pain Relief",
+                recommendations: [
+                    "Use a strap to modify poses and prevent strain",
+                    "Focus on proper alignment in all poses",
+                    "Practice wall stretches for controlled movement",
+                    "Apply heat before practice to improve circulation",
+                    "Include gentle twists to release shoulder tension"
+                ]
+            },
+            "sciatica": {
+                videoUrl: "https://www.youtube.com/embed/5FXmMSIzX3c",
+                title: "Yoga for Sciatica Relief",
+                recommendations: [
+                    "Avoid deep forward bends and intense twists",
+                    "Practice seated poses with proper hip alignment",
+                    "Use a folded blanket for sitting to elevate hips",
+                    "Include gentle piriformis stretches",
+                    "Focus on building core stability"
+                ]
+            },
+            "headache": {
+                videoUrl: "https://www.youtube.com/embed/kzsBFztJ7BM",
+                title: "Yoga for Headache Relief",
+                recommendations: [
+                    "Practice in a quiet, dimly lit room",
+                    "Use an eye pillow during relaxation",
+                    "Focus on breath awareness and gentle movement",
+                    "Try cooling pranayama practices",
+                    "Include gentle neck and shoulder releases"
+                ]
+            },
+            "insomnia": {
+                videoUrl: "https://www.youtube.com/embed/LnDsO03wqZE",
+                title: "Yoga for Better Sleep",
+                recommendations: [
+                    "Practice 1-2 hours before bedtime",
+                    "Focus on forward folds and inversions",
+                    "Use props for comfortable restorative poses",
+                    "Practice yogic sleep (Yoga Nidra)",
+                    "Include calming breathing techniques"
+                ]
             }
         };
 
+        // Keywords mapping for text description analysis
+        const keywordMap = {
+            "back": "back-pain",
+            "spine": "back-pain",
+            "lumbar": "back-pain",
+            "neck": "neck-pain",
+            "cervical": "neck-pain",
+            "joint": "joint-pain",
+            "arthritis": "joint-pain",
+            "knees": "joint-pain",
+            "stress": "stress",
+            "anxiety": "stress",
+            "tension": "stress",
+            "worry": "stress",
+            "shoulder": "shoulder-pain",
+            "rotator": "shoulder-pain",
+            "sciatica": "sciatica",
+            "nerve": "sciatica",
+            "leg pain": "sciatica",
+            "headache": "headache",
+            "migraine": "headache",
+            "head pain": "headache",
+            "sleep": "insomnia",
+            "insomnia": "insomnia",
+            "tired": "insomnia"
+        };
+
+        // Function to handle card click
+        function selectProblem(problem) {
+            document.getElementById("problem-select").value = problem;
+            document.getElementById("submit-btn").click();
+        }
+
+        // Handle submit button click
         document.getElementById("submit-btn").addEventListener("click", function() {
             const selectedProblem = document.getElementById("problem-select").value;
+            const description = document.getElementById("description").value.toLowerCase();
             const resultSection = document.getElementById("results");
-            const asanaName = document.getElementById("asana-name");
-            const asanaImage = document.getElementById("asana-image");
-            const avoidList = document.getElementById("avoid-list");
-
-            if (selectedProblem && yogaAsanas[selectedProblem]) {
-                // Show results section
-                resultSection.classList.remove("hidden");
-
-                // Set asana details
-                asanaName.textContent = yogaAsanas[selectedProblem].name;
-                asanaImage.src = yogaAsanas[selectedProblem].image;
-                asanaImage.style.display = "block"; // Make sure the image is visible
-
-                // Display things to avoid
-                avoidList.innerHTML = "";
-                yogaAsanas[selectedProblem].avoid.forEach(item => {
-                    let li = document.createElement("li");
-                    li.textContent = item;
-                    avoidList.appendChild(li);
+            const videoFrame = document.getElementById("asana-video");
+            const recommendationsList = document.getElementById("recommendations-list");
+            const resultTitle = document.querySelector(".result-title");
+            
+            let problemType = "";
+            
+            // Determine the problem type
+            if (selectedProblem && yogaContent[selectedProblem]) {
+                problemType = selectedProblem;
+            } else if (description) {
+                // Check for keywords in the description
+                for (const [keyword, problem] of Object.entries(keywordMap)) {
+                    if (description.includes(keyword)) {
+                        problemType = problem;
+                        break;
+                    }
+                }
+            }
+            
+            if (problemType && yogaContent[problemType]) {
+                // Update video and recommendations
+                videoFrame.src = yogaContent[problemType].videoUrl;
+                resultTitle.textContent = yogaContent[problemType].title;
+                
+                // Clear previous recommendations
+                recommendationsList.innerHTML = "";
+                
+                // Add new recommendations
+                yogaContent[problemType].recommendations.forEach(rec => {
+                    const li = document.createElement("li");
+                    li.textContent = rec;
+                    recommendationsList.appendChild(li);
                 });
+                
+                // Show results
+                resultSection.style.display = "block";
+                
+                // Scroll to results
+                resultSection.scrollIntoView({ behavior: 'smooth' });
             } else {
-                alert("Please select a valid body problem.");
+                alert("Please select a problem type or provide a description with recognizable symptoms.");
+            }
+        });
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
+            authDomain: "yogadt-ed173.firebaseapp.com",
+            projectId: "yogadt-ed173",
+            storageBucket: "yogadt-ed173.firebasestorage.app",
+            messagingSenderId: "877729470017",
+            appId: "1:877729470017:web:d6d4f90eb0b553d09a58c0"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Check if user data is in localStorage first (from previous login)
+        function updateProfileFromStorage() {
+            try {
+                const userData = JSON.parse(localStorage.getItem("userData"));
+                if (userData && userData.fullName && userData.email) {
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Name: ${userData.fullName}</strong></li>
+                        <li>Email: ${userData.email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    
+                    // Add logout event listener
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                    return true;
+                }
+            } catch (error) {
+                console.error("Error reading from localStorage:", error);
+            }
+            return false;
+        }
+        
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem("userData"); // Clear stored user data
+                alert("Logged out successfully.");
+                window.location.href = "login.html"; // Redirect to login page after logout
+            } catch (error) {
+                console.error("Logout Error:", error);
+            }
+        }
+        
+        // Try to update from localStorage first
+        const updatedFromStorage = updateProfileFromStorage();
+        
+        // Check if a user is logged in and fetch their name from Firestore
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log("User is logged in:", user.email);
+                
+                // If we already updated from localStorage, no need to fetch again
+                if (updatedFromStorage) return;
+                
+                try {
+                    // Fetch user data from Firestore
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    let fullName = "User"; // Default name
+                    let email = user.email;
+                    
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        fullName = userData.fullName || "User";
+                        
+                        // Store in localStorage for future use
+                        localStorage.setItem("userData", JSON.stringify({
+                            fullName: fullName,
+                            email: email,
+                            userId: user.uid
+                        }));
+                    } else {
+                        console.warn("No user document found in Firestore.");
+                    }
+                    
+                    // Update the profile dropdown
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Name: ${fullName}</strong></li>
+                        <li>Email: ${email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    
+                    // Add logout event listener
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                    
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    // Still show something in the profile even if there's an error
+                    const userProfile = document.getElementById("userProfile");
+                    userProfile.innerHTML = `
+                        <li><strong>Welcome</strong></li>
+                        <li>${user.email}</li>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+                }
+            } else {
+                // User is not logged in
+                console.log("No user logged in");
+                localStorage.removeItem("userData"); // Clear any stored user data
+                
+                // Redirect to login page if not already there
+                if (!window.location.href.includes("login.html")) {
+                    window.location.href = "login.html";
+                }
             }
         });
     </script>
