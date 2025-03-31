@@ -3,35 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoga Asanas</title>
+    <title>Yoga Asanas Videos</title>
     <link rel="stylesheet" href="yoga.css">
-    <script src="videos.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        @import url('yoga.css');
-        #videos-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1000px;
-            margin: auto;
+        .search-container {
+            max-width: 600px;
+            margin: 30px auto;
+            position: relative;
         }
-        .video-card {
-            background: rgba(255, 255, 255, 0.9);
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        .search-bar:focus {
+            border-color: #1a237e;
+            box-shadow: 0 0 10px rgba(26, 35, 126, 0.2);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            width: 100%;
+            max-width: 1200px;
+            gap: 30px;
+            padding: 20px;
+            margin: 0 auto;
+        }
+        .video-item {
+            background: white;
             padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .video-thumbnail {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
             border-radius: 10px;
-            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+        .video-details {
+            padding: 10px;
+            text-align: left;
+        }
+        .video-details p {
+            margin: 5px 0;
+            color: #333;
+            font-family: 'Poppins', sans-serif;
+        }
+        .video-details strong {
+            color: #1a237e;
+            font-size: 1.1em;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        #overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        #expanded-video {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+        }
+        #video-player {
+            width: 100%;
+            max-height: 70vh;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        #close-btn {
+            font-size: 32px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #1a237e;
+            transition: color 0.3s ease;
+        }
+        #close-btn:hover {
+            color: #000;
+        }
+        #video-title {
+            color: #1a237e;
+            font-size: 1.8em;
+            margin: 20px 0 10px;
+        }
+        #video-date {
+            color: #666;
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        #video-description {
+            color: #333;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .video-section {
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.51);
+            border-radius: 15px;
+        }
+        .video-section h1 {
+            margin-bottom: 30px;
+            color: #c8ccf5;
+            font-size: 2.5em;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
         }
-        .video-card h3 {
-            font-size: 1.5rem;
-            color: #30c437;
-            margin-bottom: 10px;
-        }
-        .video-card video {
-            width: 100%;
-            height: 200px;
-            border-radius: 8px;
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            #expanded-video {
+                width: 95%;
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -54,17 +175,39 @@
                     <li><a href="yoga.html">HOME</a></li>
                     <li><a href="courses.html">COURSES</a></li>
                     <li><a href="yogabodyproblem.html">YOGA FOR BODY PAIN</a></li>
-                    <li><a href="#" onclick="loadPage('videos.html');return false;">YOGA ASANAS</a></li>
+                    <li><a href="videos.html">YOGA ASANAS</a></li>
                     <li><a href="blog.html">BLOG</a></li>
                     <li><a href="yogacontactus.html">CONTACT US</a></li>
                 </div>
             </ul>
         </nav>
     </header>
-    <section id="dynamic-content"></section>    
-    <section id="videos-container">
-        <!-- Videos from database will be dynamically inserted here -->
-    </section>
+    
+    <main>
+        <section class="video-section">
+            <h1>Yoga Asanas Videos</h1>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search videos by title..." id="searchInput">
+            </div>
+            <div id="video-container" class="grid"></div>
+            
+            <div id="overlay">
+                <div id="expanded-video">
+                    <span id="close-btn">&times;</span>
+                    <video id="video-player" controls></video>
+                    <h2 id="video-title"></h2>
+                    <p id="video-date"></p>
+                    <p id="video-description"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Yoga for Everyone | All Rights Reserved</p>
+    </footer>
+    
+    <!-- Firebase scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
         import { 
@@ -191,7 +334,8 @@
                 }
             }
         });
-    </script>
+    </script> 
+
     <script>
         function toggleMenu() {
             var menu = document.getElementById("menu");
@@ -207,5 +351,7 @@
             }
         });
     </script>
+    
+    <script type="module" src="videos.js"></script>
 </body>
 </html>
