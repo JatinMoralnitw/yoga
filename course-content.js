@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, where, doc, getDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBfIElG6SXE_JXaJrgmGNgkt1Ta5jjbO4w",
@@ -13,74 +12,219 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-
-        if (userDoc.exists()) {
-            const activeCourseId = userDoc.data().activeCourse;
-            if (activeCourseId) {
-                loadCourseContent(activeCourseId);
-            } else {
-                alert("No active course found! Redirecting...");
-                window.location.href = "courses.html";
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Load course content
+        const courseContent = await loadCourseContent();
+        
+        if (courseContent.length > 0) {
+            // Get the teacher info from the first course content with data
+            const firstContentWithData = courseContent.find(content => content.videoUrl);
+            if (firstContentWithData) {
+                // Display teacher profile
+                await displayTeacherProfile(firstContentWithData.teacherId);
             }
+            
+            // Generate day navigation
+            generateDayNavigation(courseContent);
+            
+            // Display course videos
+            displayCourseVideos(courseContent);
+            
+            // Add scroll behavior for navigation
+            setupScrollBehavior();
+            
+            // Add video click behavior for enlarging
+            setupVideoClickBehavior();
+        } else {
+            document.getElementById('courseVideos').innerHTML = '<div class="loading">No course content available yet.</div>';
         }
-    } else {
-        alert("User not logged in! Redirecting...");
-        window.location.href = "login.html";
+    } catch (error) {
+        console.error("Error loading course content:", error);
+        document.getElementById('courseVideos').innerHTML = `<div class="loading">Error loading content: ${error.message}</div>`;
     }
 });
 
-async function loadCourseContent(courseId) {
-    const teacherDocRef = doc(db, "teachers", courseId);
-    const teacherDoc = await getDoc(teacherDocRef);
-
-    if (teacherDoc.exists()) {
-        const teacherData = teacherDoc.data();
-        document.getElementById("teacherImage").src = teacherData.imageUrl;
-        document.getElementById("teacherName").innerText = teacherData.name;
-        document.getElementById("teacherContact").innerText = teacherData.contact;
-        document.getElementById("teacherExperience").innerText = teacherData.experience;
-
-        if (teacherData.videoUrl) {
-            console.log("Retrieved video URL:", teacherData.videoUrl); // Debugging step
-            const embedUrl = convertToEmbedUrl(teacherData.videoUrl);
-            console.log("Converted embed URL:", embedUrl); // Debugging step
-            document.getElementById("courseVideo").src = embedUrl;
-        } else {
-            document.getElementById("courseVideo").outerHTML = "<p>No video uploaded yet.</p>";
+async function loadCourseContent() {
+    try {
+        const contentCollection = collection(db, "courseContent");
+        const contentQuery = query(contentCollection, orderBy("day"));
+        const querySnapshot = await getDocs(contentQuery);
+        
+        const content = [];
+        querySnapshot.forEach((doc) => {
+            content.push(doc.data());
+        });
+        
+        // If there's no content in Firebase yet, return an empty array
+        if (content.length === 0) {
+            return [];
         }
-    } else {
-        alert("Error: Course not found!");
-        window.location.href = "courses.html";
+        
+        // Fill any missing days up to 30
+        const fullContent = [];
+        for (let i = 1; i <= 30; i++) {
+            const dayContent = content.find(item => item.day === i);
+            if (dayContent) {
+                fullContent.push(dayContent);
+            } else {
+                // Add placeholder for missing days
+                fullContent.push({
+                    day: i,
+                    videoUrl: "",
+                    description: "",
+                    restrictions: "",
+                    teacherId: "",
+                    teacherName: "",
+                    uploadDate: ""
+                });
+            }
+        }
+        
+        return fullContent;
+    } catch (error) {
+        console.error("Error fetching course content:", error);
+        throw error;
     }
 }
 
-// Function to convert YouTube URL to embed format
-function convertToEmbedUrl(youtubeUrl) {
+async function displayTeacherProfile(teacherId) {
     try {
-        if (youtubeUrl.includes("youtu.be/")) {
-            // Handle shortened YouTube URLs (e.g., https://youtu.be/abcd1234)
-            const videoId = youtubeUrl.split("youtu.be/")[1]?.split("?")[0];
-            return `https://www.youtube.com/embed/${videoId}`;
-        } else if (youtubeUrl.includes("watch?v=")) {
-            // Handle standard YouTube URLs (e.g., https://www.youtube.com/watch?v=abcd1234)
-            const url = new URL(youtubeUrl);
-            const videoId = url.searchParams.get("v");
-            return `https://www.youtube.com/embed/${videoId}`;
-        } else if (youtubeUrl.includes("embed/")) {
-            // Already an embed link, return as is
-            return youtubeUrl;
+        const teacherRef = doc(db, "teachers", teacherId);
+        const teacherSnap = await getDoc(teacherRef);
+        
+        if (teacherSnap.exists()) {
+            const teacherData = teacherSnap.data();
+            const teacherProfile = document.getElementById('teacherProfile');
+            
+            teacherProfile.innerHTML = `
+                <img src="${teacherData.imageUrl}" alt="${teacherData.name}" class="profile-img">
+                <div class="profile-details">
+                    <h2>${teacherData.name}</h2>
+                    <p><strong>Experience:</strong> ${teacherData.experience} years</p>
+                    <p><strong>Contact:</strong> ${teacherData.contact}</p>
+                    <p><strong>Content:</strong> 30 Day Fitness Course</p>
+                </div>
+            `;
         } else {
-            console.error("Invalid YouTube URL format:", youtubeUrl);
-            return youtubeUrl; // Return as-is if it's already an embed link
+            document.getElementById('teacherProfile').innerHTML = '<div class="loading">Teacher profile not found.</div>';
         }
     } catch (error) {
-        console.error("Error converting YouTube URL:", youtubeUrl, error);
-        return youtubeUrl;
+        console.error("Error loading teacher profile:", error);
+        document.getElementById('teacherProfile').innerHTML = `<div class="loading">Error loading teacher profile: ${error.message}</div>`;
     }
+}
+
+function generateDayNavigation(courseContent) {
+    const daysNav = document.getElementById('daysNav');
+    daysNav.innerHTML = "";
+    
+    for (let i = 1; i <= 30; i++) {
+        const dayButton = document.createElement('button');
+        dayButton.textContent = `Day ${i}`;
+        dayButton.dataset.day = i;
+        
+        // Check if content exists for this day
+        const dayContent = courseContent.find(content => content.day === i);
+        if (!dayContent || !dayContent.videoUrl) {
+            dayButton.disabled = true;
+            dayButton.style.opacity = "0.5";
+        }
+        
+        dayButton.addEventListener('click', () => {
+            const dayElement = document.getElementById(`day-${i}`);
+            if (dayElement) {
+                // Remove active class from all buttons
+                document.querySelectorAll('.nav-days button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                dayButton.classList.add('active');
+                
+                // Scroll to the day section
+                dayElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        
+        daysNav.appendChild(dayButton);
+    }
+}
+
+function displayCourseVideos(courseContent) {
+    const courseVideos = document.getElementById('courseVideos');
+    courseVideos.innerHTML = "";
+    
+    let hasContent = false;
+    
+    courseContent.forEach(content => {
+        if (content.videoUrl) {
+            hasContent = true;
+            const videoElement = document.createElement('div');
+            videoElement.className = 'video-day';
+            videoElement.id = `day-${content.day}`;
+            
+            // Create a video element for the stored video
+            videoElement.innerHTML = `
+                <div class="video-container">
+                    <video class="video-iframe" controls>
+                        <source src="${content.videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-info">
+                        <div class="day-label">Day ${content.day}</div>
+                        <h3>Daily Exercise - ${new Date(content.uploadDate).toLocaleDateString()}</h3>
+                        <div class="description">
+                            <h4>Description:</h4>
+                            <p>${content.description || "No description available."}</p>
+                        </div>
+                        <div class="restrictions">
+                            <h4>Not Recommended For:</h4>
+                            <p>${content.restrictions ? content.restrictions.replace(/\n/g, '<br>') : "No restrictions specified."}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            courseVideos.appendChild(videoElement);
+        }
+    });
+    
+    if (!hasContent) {
+        courseVideos.innerHTML = '<div class="loading">No videos have been uploaded yet.</div>';
+    }
+}
+
+function setupScrollBehavior() {
+    // Highlight the day in navigation when scrolling to its section
+    window.addEventListener('scroll', () => {
+        const videoSections = document.querySelectorAll('.video-day');
+        const navButtons = document.querySelectorAll('.nav-days button');
+        
+        videoSections.forEach(section => {
+            const sectionTop = section.getBoundingClientRect().top;
+            const sectionId = section.id;
+            const day = sectionId.split('-')[1];
+            
+            if (sectionTop < 100) {
+                navButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.day === day) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        });
+    });
+}
+
+function setupVideoClickBehavior() {
+    // Add click event to enlarge videos
+    document.addEventListener('click', (e) => {
+        const videoElement = e.target.closest('.video-iframe');
+        if (videoElement) {
+            videoElement.classList.toggle('enlarged');
+        }
+    });
 }
