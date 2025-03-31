@@ -128,7 +128,7 @@ footer {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: 900;
     background-color: rgba(255, 255, 255, 0.226);
-    border-radius: 10px;
+    /* border-radius: 100px; */
     width: 345px;
     box-shadow: 1px 5px 10px grey;
 }
@@ -139,18 +139,20 @@ footer {
 }
 
 .menu-button {
-    width: 100%;
+    max-width: 50px;
     background: white;
     color: #4CAF50;
     padding: 10px 15px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 100%;
     font-weight: bold;
     transition: background 0.3s;
 }
 .menu-button img{
-    max-width: 30px;
-    height: 30px;
+    /* max-width: 30px;
+    height: 30px; */
+    border-radius: 100%;
+    width: 100%;
 }
 .menu-button:hover {
     background: #e0e0e0;
